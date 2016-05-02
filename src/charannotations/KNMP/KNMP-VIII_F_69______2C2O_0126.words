@@ -1,0 +1,420 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<Image name="KNMP-VIII_F_69______2C2O_0126">
+    <TextLine bottom="157" left="408" no="1" right="542" shear="0" top="96">
+        <Word bottom="157" left="408" no="1" right="450" shear="0" text="x" top="120">
+            <Character bottom="157" left="408" no="1" right="451" shear="0" text="x" top="120" />
+        </Word>
+        <Word bottom="157" left="468" no="2" right="542" shear="0" text="W" top="96">
+            <Character bottom="157" left="468" no="1" right="543" shear="0" text="W" top="96" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="178" left="408" no="2" right="1580" shear="0" top="106">
+        <Word bottom="178" left="1541" no="1" right="1580" shear="0" text="q" top="111">
+            <Character bottom="178" left="1541" no="1" right="1581" shear="0" text="q" top="111" />
+        </Word>
+        <Word bottom="161" left="468" no="2" right="542" shear="0" text="W" top="106">
+            <Character bottom="161" left="468" no="1" right="543" shear="0" text="W" top="106" />
+        </Word>
+        <Word bottom="160" left="408" no="3" right="450" shear="0" text="x" top="120">
+            <Character bottom="160" left="408" no="1" right="451" shear="0" text="x" top="120" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="242" left="879" no="3" right="914" shear="0" top="184">
+        <Word bottom="242" left="879" no="1" right="914" shear="0" text="p" top="184">
+            <Character bottom="242" left="879" no="1" right="915" shear="0" text="p" top="184" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="306" left="694" no="4" right="736" shear="0" top="248">
+        <Word bottom="306" left="694" no="1" right="736" shear="0" text="d" top="248">
+            <Character bottom="306" left="694" no="1" right="737" shear="0" text="d" top="248" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="544" left="325" no="5" right="1730" shear="0" top="479">
+        <Word bottom="544" left="1616" no="1" right="1730" shear="0" text="suis" top="479">
+            <Character bottom="544" left="1616" no="1" right="1640" shear="0" text="s" top="479" />
+            <Character bottom="544" left="1640" no="2" right="1677" shear="0" text="u" top="479" />
+            <Character bottom="544" left="1677" no="3" right="1698" shear="0" text="i" top="479" />
+            <Character bottom="544" left="1698" no="4" right="1731" shear="0" text="s" top="479" />
+        </Word>
+        <Word bottom="544" left="325" no="2" right="364" shear="0" text="b" top="486">
+            <Character bottom="544" left="325" no="1" right="365" shear="0" text="b" top="486" />
+        </Word>
+        <Word bottom="542" left="623" no="3" right="680" shear="0" text="m" top="499">
+            <Character bottom="542" left="623" no="1" right="681" shear="0" text="m" top="499" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="542" left="623" no="6" right="1054" shear="0" top="496">
+        <Word bottom="542" left="623" no="1" right="680" shear="0" text="m" top="499">
+            <Character bottom="542" left="623" no="1" right="681" shear="0" text="m" top="499" />
+        </Word>
+        <Word bottom="540" left="1024" no="2" right="1054" shear="0" text="c" top="496">
+            <Character bottom="540" left="1024" no="1" right="1055" shear="0" text="c" top="496" />
+        </Word>
+        <Word bottom="540" left="786" no="3" right="849" shear="0" text="ex" top="496">
+            <Character bottom="540" left="786" no="1" right="809" shear="0" text="e" top="496" />
+            <Character bottom="540" left="809" no="2" right="850" shear="0" text="x" top="496" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="621" left="727" no="7" right="904" shear="0" top="562">
+        <Word bottom="618" left="830" no="1" right="873" shear="0" text="u" top="577">
+            <Character bottom="618" left="830" no="1" right="874" shear="0" text="u" top="577" />
+        </Word>
+        <Word bottom="621" left="727" no="2" right="904" shear="0" text="adhuc" top="562">
+            <Character bottom="621" left="727" no="1" right="764" shear="0" text="a" top="562" />
+            <Character bottom="621" left="764" no="2" right="801" shear="0" text="d" top="562" />
+            <Character bottom="621" left="801" no="3" right="831" shear="0" text="h" top="562" />
+            <Character bottom="621" left="831" no="4" right="874" shear="0" text="u" top="562" />
+            <Character bottom="621" left="874" no="5" right="905" shear="0" text="c" top="562" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="621" left="727" no="8" right="904" shear="0" top="572">
+        <Word bottom="621" left="727" no="1" right="904" shear="0" text="adhuc" top="572">
+            <Character bottom="621" left="727" no="1" right="765" shear="0" text="a" top="572" />
+            <Character bottom="621" left="765" no="2" right="799" shear="0" text="d" top="572" />
+            <Character bottom="621" left="799" no="3" right="831" shear="0" text="h" top="572" />
+            <Character bottom="621" left="831" no="4" right="873" shear="0" text="u" top="572" />
+            <Character bottom="621" left="873" no="5" right="905" shear="0" text="c" top="572" />
+        </Word>
+        <Word bottom="618" left="830" no="2" right="873" shear="0" text="u" top="577">
+            <Character bottom="618" left="830" no="1" right="874" shear="0" text="u" top="577" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="702" left="1277" no="9" right="1317" shear="0" top="660">
+        <Word bottom="702" left="1277" no="1" right="1317" shear="0" text="n" top="660">
+            <Character bottom="702" left="1277" no="1" right="1318" shear="0" text="n" top="660" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="791" left="319" no="10" right="1680" shear="0" top="719">
+        <Word bottom="787" left="1057" no="1" right="1144" shear="0" text="eos" top="744">
+            <Character bottom="787" left="1057" no="1" right="1061" shear="0" text=";" top="744" />
+            <Character bottom="787" left="1061" no="2" right="1082" shear="0" text="e" top="744" />
+            <Character bottom="787" left="1082" no="3" right="1110" shear="0" text="o" top="744" />
+            <Character bottom="787" left="1110" no="4" right="1145" shear="0" text="s" top="744" />
+        </Word>
+        <Word bottom="791" left="1499" no="2" right="1680" shear="0" text="adhuc" top="729">
+            <Character bottom="791" left="1499" no="1" right="1504" shear="0" text=":" top="729" />
+            <Character bottom="791" left="1504" no="2" right="1538" shear="0" text="a" top="729" />
+            <Character bottom="791" left="1538" no="3" right="1577" shear="0" text="d" top="729" />
+            <Character bottom="791" left="1577" no="4" right="1608" shear="0" text="h" top="729" />
+            <Character bottom="791" left="1608" no="5" right="1651" shear="0" text="u" top="729" />
+            <Character bottom="791" left="1651" no="6" right="1681" shear="0" text="c" top="729" />
+        </Word>
+        <Word bottom="789" left="319" no="3" right="366" shear="0" text="A" top="719">
+            <Character bottom="789" left="319" no="1" right="367" shear="0" text="A" top="719" />
+        </Word>
+        <Word bottom="790" left="1606" no="4" right="1649" shear="0" text="u" top="747">
+            <Character bottom="790" left="1606" no="1" right="1650" shear="0" text="u" top="747" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="790" left="1057" no="11" right="1649" shear="0" top="744">
+        <Word bottom="787" left="1057" no="1" right="1144" shear="0" text="eos" top="744">
+            <Character bottom="787" left="1057" no="1" right="1062" shear="0" text=":" top="744" />
+            <Character bottom="787" left="1062" no="2" right="1082" shear="0" text="e" top="744" />
+            <Character bottom="787" left="1082" no="3" right="1111" shear="0" text="o" top="744" />
+            <Character bottom="787" left="1111" no="4" right="1145" shear="0" text="s" top="744" />
+        </Word>
+        <Word bottom="790" left="1606" no="2" right="1649" shear="0" text="u" top="747">
+            <Character bottom="790" left="1606" no="1" right="1608" shear="0" text=":" top="747" />
+            <Character bottom="790" left="1608" no="2" right="1650" shear="0" text="u" top="747" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="958" left="1121" no="12" right="1213" shear="0" top="899">
+        <Word bottom="958" left="1121" no="1" right="1213" shear="0" text="ubi" top="899">
+            <Character bottom="958" left="1121" no="1" right="1125" shear="0" text=":" top="899" />
+            <Character bottom="958" left="1125" no="2" right="1163" shear="0" text="u" top="899" />
+            <Character bottom="958" left="1163" no="3" right="1197" shear="0" text="b" top="899" />
+            <Character bottom="958" left="1197" no="4" right="1214" shear="0" text="i" top="899" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1041" left="320" no="13" right="1170" shear="0" top="993">
+        <Word bottom="1041" left="1128" no="1" right="1170" shear="0" text="u" top="1000">
+            <Character bottom="1041" left="1128" no="1" right="1131" shear="0" text=";" top="1000" />
+            <Character bottom="1041" left="1131" no="2" right="1171" shear="0" text="u" top="1000" />
+        </Word>
+        <Word bottom="1039" left="320" no="2" right="423" shear="0" text="tota" top="993">
+            <Character bottom="1039" left="320" no="1" right="352" shear="0" text="t" top="993" />
+            <Character bottom="1039" left="352" no="2" right="374" shear="0" text="o" top="993" />
+            <Character bottom="1039" left="374" no="3" right="393" shear="0" text="t" top="993" />
+            <Character bottom="1039" left="393" no="4" right="424" shear="0" text="a" top="993" />
+        </Word>
+        <Word bottom="1041" left="1022" no="3" right="1057" shear="0" text="a" top="1001">
+            <Character bottom="1041" left="1022" no="1" right="1058" shear="0" text="a" top="1001" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1041" left="320" no="14" right="1170" shear="0" top="993">
+        <Word bottom="1039" left="320" no="1" right="423" shear="0" text="tota" top="993">
+            <Character bottom="1039" left="320" no="1" right="352" shear="0" text="t" top="993" />
+            <Character bottom="1039" left="352" no="2" right="375" shear="0" text="o" top="993" />
+            <Character bottom="1039" left="375" no="3" right="393" shear="0" text="t" top="993" />
+            <Character bottom="1039" left="393" no="4" right="424" shear="0" text="a" top="993" />
+        </Word>
+        <Word bottom="1041" left="1022" no="2" right="1057" shear="0" text="a" top="1001">
+            <Character bottom="1041" left="1022" no="1" right="1058" shear="0" text="a" top="1001" />
+        </Word>
+        <Word bottom="1041" left="1128" no="3" right="1170" shear="0" text="u" top="1000">
+            <Character bottom="1041" left="1128" no="1" right="1171" shear="0" text="u" top="1000" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1132" left="869" no="15" right="905" shear="0" top="1085">
+        <Word bottom="1132" left="869" no="1" right="905" shear="0" text="r" top="1085">
+            <Character bottom="1132" left="869" no="1" right="871" shear="0" text=";" top="1085" />
+            <Character bottom="1132" left="871" no="2" right="906" shear="0" text="r" top="1085" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1150" left="320" no="16" right="905" shear="0" top="1085">
+        <Word bottom="1132" left="869" no="1" right="905" shear="0" text="r" top="1085">
+            <Character bottom="1132" left="869" no="1" right="872" shear="0" text=";" top="1085" />
+            <Character bottom="1132" left="872" no="2" right="906" shear="0" text="r" top="1085" />
+        </Word>
+        <Word bottom="1150" left="320" no="2" right="361" shear="0" text="g" top="1088">
+            <Character bottom="1150" left="320" no="1" right="362" shear="0" text="g" top="1088" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1208" left="932" no="17" right="965" shear="0" top="1165">
+        <Word bottom="1208" left="932" no="1" right="965" shear="0" text="o" top="1165">
+            <Character bottom="1208" left="932" no="1" right="966" shear="0" text="o" top="1165" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1208" left="932" no="18" right="965" shear="0" top="1165">
+        <Word bottom="1208" left="932" no="1" right="965" shear="0" text="o" top="1165">
+            <Character bottom="1208" left="932" no="1" right="966" shear="0" text="o" top="1165" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1367" left="537" no="19" right="1207" shear="0" top="1312">
+        <Word bottom="1367" left="1167" no="1" right="1207" shear="0" text="v" top="1324">
+            <Character bottom="1367" left="1167" no="1" right="1208" shear="0" text="v" top="1324" />
+        </Word>
+        <Word bottom="1365" left="537" no="2" right="579" shear="0" text="d" top="1312">
+            <Character bottom="1365" left="537" no="1" right="540" shear="0" text=";" top="1312" />
+            <Character bottom="1365" left="540" no="2" right="580" shear="0" text="d" top="1312" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1446" left="1670" no="20" right="1707" shear="0" top="1398">
+        <Word bottom="1446" left="1670" no="1" right="1707" shear="0" text="e" top="1398">
+            <Character bottom="1446" left="1670" no="1" right="1708" shear="0" text="e" top="1398" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1526" left="1486" no="21" right="1523" shear="0" top="1484">
+        <Word bottom="1526" left="1486" no="1" right="1523" shear="0" text="a" top="1484">
+            <Character bottom="1526" left="1486" no="1" right="1524" shear="0" text="a" top="1484" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1650" left="387" no="22" right="1227" shear="0" top="1557">
+        <Word bottom="1618" left="857" no="1" right="1050" shear="0" text="matres" top="1568">
+            <Character bottom="1618" left="857" no="1" right="914" shear="0" text="m" top="1568" />
+            <Character bottom="1618" left="914" no="2" right="943" shear="0" text="a" top="1568" />
+            <Character bottom="1618" left="943" no="3" right="967" shear="0" text="t" top="1568" />
+            <Character bottom="1618" left="967" no="4" right="996" shear="0" text="r" top="1568" />
+            <Character bottom="1618" left="996" no="5" right="1018" shear="0" text="e" top="1568" />
+            <Character bottom="1618" left="1018" no="6" right="1051" shear="0" text="s" top="1568" />
+        </Word>
+        <Word bottom="1615" left="1195" no="2" right="1227" shear="0" text="e" top="1568">
+            <Character bottom="1615" left="1195" no="1" right="1228" shear="0" text="e" top="1568" />
+        </Word>
+        <Word bottom="1629" left="442" no="3" right="472" shear="0" text="c" top="1584">
+            <Character bottom="1629" left="442" no="1" right="473" shear="0" text="c" top="1584" />
+        </Word>
+        <Word bottom="1650" left="387" no="4" right="427" shear="0" text="g" top="1584">
+            <Character bottom="1650" left="387" no="1" right="428" shear="0" text="g" top="1584" />
+        </Word>
+        <Word bottom="1616" left="1087" no="5" right="1125" shear="0" text="b" top="1557">
+            <Character bottom="1616" left="1087" no="1" right="1126" shear="0" text="b" top="1557" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1709" left="493" no="23" right="1711" shear="0" top="1634">
+        <Word bottom="1702" left="1599" no="1" right="1678" shear="0" text="sui" top="1635">
+            <Character bottom="1702" left="1599" no="1" right="1622" shear="0" text="s" top="1635" />
+            <Character bottom="1702" left="1622" no="2" right="1659" shear="0" text="u" top="1635" />
+            <Character bottom="1702" left="1659" no="3" right="1679" shear="0" text="i" top="1635" />
+        </Word>
+        <Word bottom="1709" left="493" no="2" right="534" shear="0" text="d" top="1647">
+            <Character bottom="1709" left="493" no="1" right="535" shear="0" text="d" top="1647" />
+        </Word>
+        <Word bottom="1706" left="899" no="3" right="937" shear="0" text="a" top="1664">
+            <Character bottom="1706" left="899" no="1" right="938" shear="0" text="a" top="1664" />
+        </Word>
+        <Word bottom="1702" left="1599" no="4" right="1711" shear="0" text="suis" top="1634">
+            <Character bottom="1702" left="1599" no="1" right="1622" shear="0" text="s" top="1634" />
+            <Character bottom="1702" left="1622" no="2" right="1659" shear="0" text="u" top="1634" />
+            <Character bottom="1702" left="1659" no="3" right="1676" shear="0" text="i" top="1634" />
+            <Character bottom="1702" left="1676" no="4" right="1712" shear="0" text="s" top="1634" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1706" left="899" no="24" right="937" shear="0" top="1664">
+        <Word bottom="1706" left="899" no="1" right="937" shear="0" text="a" top="1664">
+            <Character bottom="1706" left="899" no="1" right="938" shear="0" text="a" top="1664" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1797" left="411" no="25" right="1635" shear="0" top="1725">
+        <Word bottom="1790" left="1525" no="1" right="1565" shear="0" text="h" top="1725">
+            <Character bottom="1790" left="1525" no="1" right="1566" shear="0" text="h" top="1725" />
+        </Word>
+        <Word bottom="1788" left="1590" no="2" right="1635" shear="0" text="d" top="1726">
+            <Character bottom="1788" left="1590" no="1" right="1593" shear="0" text=";" top="1726" />
+            <Character bottom="1788" left="1593" no="2" right="1636" shear="0" text="d" top="1726" />
+        </Word>
+        <Word bottom="1797" left="411" no="3" right="557" shear="0" text="Certe" top="1726">
+            <Character bottom="1797" left="411" no="1" right="449" shear="0" text="C" top="1726" />
+            <Character bottom="1797" left="449" no="2" right="472" shear="0" text="e" top="1726" />
+            <Character bottom="1797" left="472" no="3" right="501" shear="0" text="r" top="1726" />
+            <Character bottom="1797" left="501" no="4" right="529" shear="0" text="t" top="1726" />
+            <Character bottom="1797" left="529" no="5" right="558" shear="0" text="e" top="1726" />
+        </Word>
+        <Word bottom="1793" left="411" no="4" right="450" shear="0" text="C" top="1726">
+            <Character bottom="1793" left="411" no="1" right="451" shear="0" text="C" top="1726" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1795" left="923" no="26" right="951" shear="0" top="1752">
+        <Word bottom="1795" left="923" no="1" right="951" shear="0" text="c" top="1752">
+            <Character bottom="1795" left="923" no="1" right="952" shear="0" text="c" top="1752" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1881" left="387" no="27" right="1522" shear="0" top="1813">
+        <Word bottom="1881" left="558" no="1" right="767" shear="0" text="fortunamfortuna" top="1813">
+            <Character bottom="1881" left="558" no="1" right="576" shear="0" text="f" top="1813" />
+            <Character bottom="1881" left="576" no="2" right="603" shear="0" text="o" top="1813" />
+            <Character bottom="1881" left="603" no="3" right="631" shear="0" text="r" top="1813" />
+            <Character bottom="1881" left="631" no="4" right="654" shear="0" text="t" top="1813" />
+            <Character bottom="1881" left="654" no="5" right="694" shear="0" text="u" top="1813" />
+            <Character bottom="1881" left="694" no="6" right="728" shear="0" text="n" top="1813" />
+            <Character bottom="1881" left="728" no="7" right="768" shear="0" text="a" top="1813" />
+        </Word>
+        <Word bottom="1881" left="558" no="2" right="764" shear="0" text="fortunamfortuna" top="1813">
+            <Character bottom="1881" left="558" no="1" right="577" shear="0" text="f" top="1813" />
+            <Character bottom="1881" left="577" no="2" right="602" shear="0" text="o" top="1813" />
+            <Character bottom="1881" left="602" no="3" right="631" shear="0" text="r" top="1813" />
+            <Character bottom="1881" left="631" no="4" right="654" shear="0" text="t" top="1813" />
+            <Character bottom="1881" left="654" no="5" right="694" shear="0" text="u" top="1813" />
+            <Character bottom="1881" left="694" no="6" right="726" shear="0" text="n" top="1813" />
+            <Character bottom="1881" left="726" no="7" right="765" shear="0" text="a" top="1813" />
+        </Word>
+        <Word bottom="1878" left="1406" no="3" right="1445" shear="0" text="d" top="1817">
+            <Character bottom="1878" left="1406" no="1" right="1446" shear="0" text="d" top="1817" />
+        </Word>
+        <Word bottom="1879" left="387" no="4" right="415" shear="0" text="c" top="1837">
+            <Character bottom="1879" left="387" no="1" right="416" shear="0" text="c" top="1837" />
+        </Word>
+        <Word bottom="1878" left="1406" no="5" right="1522" shear="0" text="dux" top="1817">
+            <Character bottom="1878" left="1406" no="1" right="1445" shear="0" text="d" top="1817" />
+            <Character bottom="1878" left="1445" no="2" right="1479" shear="0" text="u" top="1817" />
+            <Character bottom="1878" left="1479" no="3" right="1510" shear="0" text="x" top="1817" />
+            <Character bottom="1878" left="1510" no="4" right="1523" shear="0" text=";" top="1817" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="1884" left="387" no="28" right="803" shear="0" top="1830">
+        <Word bottom="1879" left="387" no="1" right="415" shear="0" text="c" top="1837">
+            <Character bottom="1879" left="387" no="1" right="416" shear="0" text="c" top="1837" />
+        </Word>
+        <Word bottom="1879" left="477" no="2" right="554" shear="0" text="te" top="1833">
+            <Character bottom="1879" left="477" no="1" right="480" shear="0" text=";" top="1833" />
+            <Character bottom="1879" left="480" no="2" right="509" shear="0" text="t" top="1833" />
+            <Character bottom="1879" left="509" no="3" right="541" shear="0" text="e" top="1833" />
+            <Character bottom="1879" left="541" no="4" right="555" shear="0" text=";" top="1833" />
+        </Word>
+        <Word bottom="1884" left="766" no="3" right="803" shear="0" text="b" top="1830">
+            <Character bottom="1884" left="766" no="1" right="804" shear="0" text="b" top="1830" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="2116" left="588" no="29" right="617" shear="0" top="2073">
+        <Word bottom="2116" left="588" no="1" right="617" shear="0" text="e" top="2073">
+            <Character bottom="2116" left="588" no="1" right="618" shear="0" text="e" top="2073" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="2116" left="588" no="30" right="617" shear="0" top="2073">
+        <Word bottom="2116" left="588" no="1" right="617" shear="0" text="e" top="2073">
+            <Character bottom="2116" left="588" no="1" right="618" shear="0" text="e" top="2073" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="2200" left="1281" no="31" right="1715" shear="0" top="2121">
+        <Word bottom="2199" left="1416" no="1" right="1451" shear="0" text="r" top="2146">
+            <Character bottom="2199" left="1416" no="1" right="1452" shear="0" text="r" top="2146" />
+        </Word>
+        <Word bottom="2194" left="1589" no="2" right="1715" shear="0" text="tum" top="2121">
+            <Character bottom="2194" left="1589" no="1" right="1623" shear="0" text="t" top="2121" />
+            <Character bottom="2194" left="1623" no="2" right="1657" shear="0" text="u" top="2121" />
+            <Character bottom="2194" left="1657" no="3" right="1716" shear="0" text="m" top="2121" />
+        </Word>
+        <Word bottom="2200" left="1281" no="3" right="1592" shear="0" text="disturbare" top="2133">
+            <Character bottom="2200" left="1281" no="1" right="1321" shear="0" text="d" top="2133" />
+            <Character bottom="2200" left="1321" no="2" right="1341" shear="0" text="i" top="2133" />
+            <Character bottom="2200" left="1341" no="3" right="1363" shear="0" text="s" top="2133" />
+            <Character bottom="2200" left="1363" no="4" right="1382" shear="0" text="t" top="2133" />
+            <Character bottom="2200" left="1382" no="5" right="1420" shear="0" text="u" top="2133" />
+            <Character bottom="2200" left="1420" no="6" right="1449" shear="0" text="r" top="2133" />
+            <Character bottom="2200" left="1449" no="7" right="1482" shear="0" text="b" top="2133" />
+            <Character bottom="2200" left="1482" no="8" right="1514" shear="0" text="a" top="2133" />
+            <Character bottom="2200" left="1514" no="9" right="1545" shear="0" text="r" top="2133" />
+            <Character bottom="2200" left="1545" no="10" right="1593" shear="0" text="e" top="2133" />
+        </Word>
+        <Word bottom="2198" left="1281" no="4" right="1324" shear="0" text="d" top="2142">
+            <Character bottom="2198" left="1281" no="1" right="1325" shear="0" text="d" top="2142" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="2199" left="1416" no="32" right="1451" shear="0" top="2152">
+        <Word bottom="2199" left="1416" no="1" right="1451" shear="0" text="r" top="2152">
+            <Character bottom="2199" left="1416" no="1" right="1452" shear="0" text="r" top="2152" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="2298" left="522" no="33" right="1294" shear="0" top="2213">
+        <Word bottom="2298" left="1108" no="1" right="1285" shear="0" text="postera" top="2213">
+            <Character bottom="2298" left="1108" no="1" right="1143" shear="0" text="p" top="2213" />
+            <Character bottom="2298" left="1143" no="2" right="1168" shear="0" text="o" top="2213" />
+            <Character bottom="2298" left="1168" no="3" right="1190" shear="0" text="s" top="2213" />
+            <Character bottom="2298" left="1190" no="4" right="1209" shear="0" text="t" top="2213" />
+            <Character bottom="2298" left="1209" no="5" right="1235" shear="0" text="e" top="2213" />
+            <Character bottom="2298" left="1235" no="6" right="1262" shear="0" text="r" top="2213" />
+            <Character bottom="2298" left="1262" no="7" right="1286" shear="0" text="a" top="2213" />
+        </Word>
+        <Word bottom="2298" left="1108" no="2" right="1294" shear="0" text="postera" top="2213">
+            <Character bottom="2298" left="1108" no="1" right="1144" shear="0" text="p" top="2213" />
+            <Character bottom="2298" left="1144" no="2" right="1168" shear="0" text="o" top="2213" />
+            <Character bottom="2298" left="1168" no="3" right="1191" shear="0" text="s" top="2213" />
+            <Character bottom="2298" left="1191" no="4" right="1207" shear="0" text="t" top="2213" />
+            <Character bottom="2298" left="1207" no="5" right="1235" shear="0" text="e" top="2213" />
+            <Character bottom="2298" left="1235" no="6" right="1260" shear="0" text="r" top="2213" />
+            <Character bottom="2298" left="1260" no="7" right="1295" shear="0" text="a" top="2213" />
+        </Word>
+        <Word bottom="2287" left="522" no="3" right="641" shear="0" text="dux" top="2233">
+            <Character bottom="2287" left="522" no="1" right="562" shear="0" text="d" top="2233" />
+            <Character bottom="2287" left="562" no="2" right="601" shear="0" text="u" top="2233" />
+            <Character bottom="2287" left="601" no="3" right="642" shear="0" text="x" top="2233" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="2367" left="413" no="34" right="1625" shear="0" top="2294">
+        <Word bottom="2364" left="808" no="1" right="901" shear="0" text="ubi" top="2299">
+            <Character bottom="2364" left="808" no="1" right="812" shear="0" text=";" top="2299" />
+            <Character bottom="2364" left="812" no="2" right="850" shear="0" text="u" top="2299" />
+            <Character bottom="2364" left="850" no="3" right="883" shear="0" text="b" top="2299" />
+            <Character bottom="2364" left="883" no="4" right="902" shear="0" text="i" top="2299" />
+        </Word>
+        <Word bottom="2359" left="1491" no="2" right="1613" shear="0" text="suos" top="2294">
+            <Character bottom="2359" left="1491" no="1" right="1515" shear="0" text="s" top="2294" />
+            <Character bottom="2359" left="1515" no="2" right="1551" shear="0" text="u" top="2294" />
+            <Character bottom="2359" left="1551" no="3" right="1577" shear="0" text="o" top="2294" />
+            <Character bottom="2359" left="1577" no="4" right="1614" shear="0" text="s" top="2294" />
+        </Word>
+        <Word bottom="2359" left="1491" no="3" right="1625" shear="0" text="suos" top="2294">
+            <Character bottom="2359" left="1491" no="1" right="1515" shear="0" text="s" top="2294" />
+            <Character bottom="2359" left="1515" no="2" right="1551" shear="0" text="u" top="2294" />
+            <Character bottom="2359" left="1551" no="3" right="1578" shear="0" text="o" top="2294" />
+            <Character bottom="2359" left="1578" no="4" right="1610" shear="0" text="s" top="2294" />
+            <Character bottom="2359" left="1610" no="5" right="1626" shear="0" text=";" top="2294" />
+        </Word>
+        <Word bottom="2366" left="413" no="4" right="456" shear="0" text="v" top="2324">
+            <Character bottom="2366" left="413" no="1" right="457" shear="0" text="v" top="2324" />
+        </Word>
+        <Word bottom="2367" left="1377" no="5" right="1416" shear="0" text="p" top="2310">
+            <Character bottom="2367" left="1377" no="1" right="1417" shear="0" text="p" top="2310" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="2442" left="779" no="35" right="819" shear="0" top="2400">
+        <Word bottom="2442" left="779" no="1" right="819" shear="0" text="v" top="2400">
+            <Character bottom="2442" left="779" no="1" right="820" shear="0" text="v" top="2400" />
+        </Word>
+    </TextLine>
+    <TextLine bottom="2442" left="779" no="36" right="819" shear="0" top="2400">
+        <Word bottom="2442" left="779" no="1" right="819" shear="0" text="v" top="2400">
+            <Character bottom="2442" left="779" no="1" right="820" shear="0" text="v" top="2400" />
+        </Word>
+    </TextLine>
+</Image>

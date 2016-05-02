@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding = "UTF-8"?>
+<Image name="Stanford-CCCC_0036">
+    <TextLine no="1" top="341" bottom="418" left="1774" right="1826" shear="0">
+        <Word no="1" top="341" bottom="418" left="1774" right="1826" shear="0" text="h">
+            <Character no="1" top="341" bottom="418" left="1774" right="1827" shear="0" text="h"/>
+        </Word>
+    </TextLine>
+    <TextLine no="2" top="407" bottom="488" left="244" right="723" shear="0">
+        <Word no="1" top="412" bottom="488" left="244" right="420" shear="0" text="lome">
+            <Character no="1" top="412" bottom="488" left="244" right="277" shear="0" text="l"/>
+            <Character no="2" top="412" bottom="488" left="277" right="310" shear="0" text="o"/>
+            <Character no="3" top="412" bottom="488" left="310" right="380" shear="0" text="m"/>
+            <Character no="4" top="412" bottom="488" left="380" right="421" shear="0" text="e"/>
+        </Word>
+        <Word no="2" top="412" bottom="488" left="244" right="416" shear="0" text="lome">
+            <Character no="1" top="412" bottom="488" left="244" right="276" shear="0" text="l"/>
+            <Character no="2" top="412" bottom="488" left="276" right="311" shear="0" text="o"/>
+            <Character no="3" top="412" bottom="488" left="311" right="380" shear="0" text="m"/>
+            <Character no="4" top="412" bottom="488" left="380" right="417" shear="0" text="e"/>
+        </Word>
+        <Word no="3" top="407" bottom="486" left="665" right="720" shear="0" text="h">
+            <Character no="1" top="407" bottom="486" left="665" right="721" shear="0" text="h"/>
+        </Word>
+        <Word no="4" top="407" bottom="486" left="665" right="723" shear="0" text="h">
+            <Character no="1" top="407" bottom="486" left="665" right="724" shear="0" text="h"/>
+        </Word>
+    </TextLine>
+    <TextLine no="3" top="637" bottom="712" left="993" right="1045" shear="0">
+        <Word no="1" top="637" bottom="712" left="993" right="1045" shear="0" text="h">
+            <Character no="1" top="637" bottom="712" left="993" right="1046" shear="0" text="h"/>
+        </Word>
+    </TextLine>
+    <TextLine no="4" top="786" bottom="835" left="1721" right="1759" shear="0">
+        <Word no="1" top="786" bottom="835" left="1721" right="1759" shear="0" text="c">
+            <Character no="1" top="786" bottom="835" left="1721" right="1760" shear="0" text="c"/>
+        </Word>
+        <Word no="2" top="786" bottom="835" left="1721" right="1759" shear="0" text="c">
+            <Character no="1" top="786" bottom="835" left="1721" right="1760" shear="0" text="c"/>
+        </Word>
+    </TextLine>
+    <TextLine no="5" top="1270" bottom="1337" left="251" right="286" shear="0">
+        <Word no="1" top="1270" bottom="1337" left="251" right="286" shear="0" text="d">
+            <Character no="1" top="1270" bottom="1337" left="251" right="287" shear="0" text="d"/>
+        </Word>
+    </TextLine>
+    <TextLine no="6" top="1383" bottom="1468" left="1697" right="1755" shear="0">
+        <Word no="1" top="1383" bottom="1468" left="1697" right="1755" shear="0" text="D">
+            <Character no="1" top="1383" bottom="1468" left="1697" right="1756" shear="0" text="D"/>
+        </Word>
+    </TextLine>
+    <TextLine no="7" top="2291" bottom="2402" left="119" right="265" shear="0">
+        <Word no="1" top="2291" bottom="2402" left="119" right="265" shear="0" text="@sona_fona">
+            <Character no="1" top="2291" bottom="2402" left="119" right="142" shear="0" text="f"/>
+            <Character no="2" top="2291" bottom="2402" left="142" right="181" shear="0" text="o"/>
+            <Character no="3" top="2291" bottom="2402" left="181" right="223" shear="0" text="n"/>
+            <Character no="4" top="2291" bottom="2402" left="223" right="266" shear="0" text="a"/>
+        </Word>
+    </TextLine>
+    <TextLine no="8" top="2392" bottom="2499" left="226" right="370" shear="0">
+        <Word no="1" top="2392" bottom="2499" left="226" right="370" shear="0" text="@sona_fona">
+            <Character no="1" top="2392" bottom="2499" left="226" right="248" shear="0" text="f"/>
+            <Character no="2" top="2392" bottom="2499" left="248" right="280" shear="0" text="o"/>
+            <Character no="3" top="2392" bottom="2499" left="280" right="328" shear="0" text="n"/>
+            <Character no="4" top="2392" bottom="2499" left="328" right="371" shear="0" text="a"/>
+        </Word>
+    </TextLine>
+    <TextLine no="9" top="2729" bottom="2815" left="1759" right="1817" shear="0">
+        <Word no="1" top="2729" bottom="2815" left="1759" right="1817" shear="0" text="h">
+            <Character no="1" top="2729" bottom="2815" left="1759" right="1818" shear="0" text="h"/>
+        </Word>
+    </TextLine>
+    <TextLine no="10" top="3053" bottom="3109" left="1131" right="1191" shear="0">
+        <Word no="1" top="3053" bottom="3109" left="1131" right="1191" shear="0" text="u">
+            <Character no="1" top="3053" bottom="3109" left="1131" right="1192" shear="0" text="u"/>
+        </Word>
+    </TextLine>
+    <TextLine no="11" top="3352" bottom="3428" left="691" right="1130" shear="0">
+        <Word no="1" top="3364" bottom="3415" left="691" right="745" shear="0" text="a">
+            <Character no="1" top="3364" bottom="3415" left="691" right="746" shear="0" text="a"/>
+        </Word>
+        <Word no="2" top="3352" bottom="3428" left="1087" right="1130" shear="0" text="d">
+            <Character no="1" top="3352" bottom="3428" left="1087" right="1131" shear="0" text="d"/>
+        </Word>
+    </TextLine>
+</Image>

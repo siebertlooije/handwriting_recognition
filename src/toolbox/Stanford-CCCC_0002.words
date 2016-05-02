@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding = "UTF-8"?>
+<Image name="Stanford-CCCC_0002">
+    <TextLine no="1" top="330" bottom="442" left="1579" right="1691" shear="0">
+        <Word no="1" top="330" bottom="442" left="1579" right="1691" shear="0" text="hir"/>
+    </TextLine>
+    <TextLine no="2" top="445" bottom="559" left="845" right="2266" shear="0">
+        <Word no="1" top="452" bottom="559" left="2221" right="2266" shear="0" text="@thorn"/>
+        <Word no="2" top="452" bottom="548" left="845" right="886" shear="0" text="p"/>
+        <Word no="3" top="445" bottom="559" left="2046" right="2093" shear="0" text="@thorn"/>
+    </TextLine>
+    <TextLine no="3" top="559" bottom="666" left="2020" right="2280" shear="0">
+        <Word no="1" top="564" bottom="666" left="2237" right="2280" shear="0" text="@thorn"/>
+        <Word no="2" top="559" bottom="666" left="2020" right="2068" shear="0" text="@thorn"/>
+    </TextLine>
+    <TextLine no="4" top="661" bottom="770" left="615" right="2235" shear="0">
+        <Word no="1" top="662" bottom="770" left="2182" right="2235" shear="0" text="@thorn"/>
+        <Word no="2" top="661" bottom="732" left="615" right="848" shear="0" text="middan"/>
+    </TextLine>
+    <TextLine no="5" top="849" bottom="923" left="704" right="905" shear="0">
+        <Word no="1" top="849" bottom="923" left="704" right="905" shear="0" text="buton"/>
+    </TextLine>
+    <TextLine no="6" top="964" bottom="1075" left="1770" right="1819" shear="0">
+        <Word no="1" top="964" bottom="1075" left="1770" right="1819" shear="0" text="@thorn"/>
+    </TextLine>
+    <TextLine no="7" top="1039" bottom="1140" left="1146" right="1446" shear="0">
+        <Word no="1" top="1039" bottom="1140" left="1146" right="1444" shear="0" text="healdath"/>
+        <Word no="2" top="1039" bottom="1140" left="1146" right="1446" shear="0" text="healdath"/>
+    </TextLine>
+    <TextLine no="8" top="1147" bottom="1285" left="856" right="1903" shear="0">
+        <Word no="1" top="1190" bottom="1285" left="1758" right="1903" shear="0" text="pite"/>
+        <Word no="2" top="1151" bottom="1271" left="856" right="908" shear="0" text="@thorn"/>
+        <Word no="3" top="1147" bottom="1285" left="1520" right="1757" shear="0" text="thonne"/>
+    </TextLine>
+    <TextLine no="9" top="1270" bottom="1382" left="1638" right="1866" shear="0">
+        <Word no="1" top="1270" bottom="1382" left="1638" right="1866" shear="0" text="thonne"/>
+        <Word no="2" top="1270" bottom="1382" left="1638" right="1687" shear="0" text="@thorn"/>
+    </TextLine>
+    <TextLine no="10" top="1362" bottom="1460" left="1856" right="1913" shear="0">
+        <Word no="1" top="1362" bottom="1460" left="1856" right="1913" shear="0" text="S"/>
+    </TextLine>
+    <TextLine no="11" top="1471" bottom="1550" left="1535" right="1776" shear="0">
+        <Word no="1" top="1471" bottom="1550" left="1535" right="1776" shear="0" text="middan"/>
+    </TextLine>
+    <TextLine no="12" top="1795" bottom="1877" left="1622" right="2280" shear="0">
+        <Word no="1" top="1795" bottom="1873" left="1622" right="1724" shear="0" text="On"/>
+        <Word no="2" top="1802" bottom="1877" left="2241" right="2280" shear="0" text="c"/>
+    </TextLine>
+    <TextLine no="13" top="1890" bottom="1991" left="617" right="659" shear="0">
+        <Word no="1" top="1890" bottom="1991" left="617" right="659" shear="0" text="@thorn"/>
+    </TextLine>
+    <TextLine no="14" top="2015" bottom="2111" left="1561" right="1837" shear="0">
+        <Word no="1" top="2015" bottom="2111" left="1561" right="1837" shear="0" text="manner"/>
+    </TextLine>
+    <TextLine no="15" top="2183" bottom="2314" left="1074" right="1729" shear="0">
+        <Word no="1" top="2183" bottom="2264" left="1074" right="1208" shear="0" text="mid"/>
+        <Word no="2" top="2211" bottom="2314" left="1683" right="1729" shear="0" text="@thorn"/>
+    </TextLine>
+    <TextLine no="16" top="2306" bottom="2356" left="743" right="783" shear="0">
+        <Word no="1" top="2306" bottom="2356" left="743" right="783" shear="0" text="o"/>
+    </TextLine>
+    <TextLine no="17" top="2379" bottom="2499" left="738" right="2062" shear="0">
+        <Word no="1" top="2420" bottom="2483" left="1940" right="1980" shear="0" text="d"/>
+        <Word no="2" top="2379" bottom="2499" left="738" right="854" shear="0" text="hir"/>
+        <Word no="3" top="2382" bottom="2466" left="989" right="1045" shear="0" text="h"/>
+        <Word no="4" top="2420" bottom="2490" left="1818" right="2062" shear="0" text="middan"/>
+    </TextLine>
+    <TextLine no="18" top="2506" bottom="2623" left="1121" right="1360" shear="0">
+        <Word no="1" top="2506" bottom="2623" left="1121" right="1360" shear="0" text="theonde"/>
+    </TextLine>
+    <TextLine no="19" top="2799" bottom="2892" left="765" right="2220" shear="0">
+        <Word no="1" top="2813" bottom="2892" left="2155" right="2215" shear="0" text="@u^~"/>
+        <Word no="2" top="2813" bottom="2892" left="2155" right="2220" shear="0" text="@u^~"/>
+        <Word no="3" top="2799" bottom="2872" left="765" right="904" shear="0" text="mid"/>
+    </TextLine>
+    <TextLine no="20" top="2998" bottom="3072" left="828" right="1089" shear="0">
+        <Word no="1" top="2998" bottom="3070" left="828" right="964" shear="0" text="mid"/>
+        <Word no="2" top="2998" bottom="3072" left="828" right="1089" shear="0" text="middan"/>
+    </TextLine>
+    <TextLine no="21" top="3097" bottom="3184" left="572" right="2079" shear="0">
+        <Word no="1" top="3111" bottom="3183" left="1804" right="2079" shear="0" text="middan"/>
+        <Word no="2" top="3113" bottom="3164" left="891" right="928" shear="0" text="c"/>
+        <Word no="3" top="3097" bottom="3184" left="572" right="648" shear="0" text="B"/>
+    </TextLine>
+    <TextLine no="22" top="3199" bottom="3308" left="2212" right="2258" shear="0">
+        <Word no="1" top="3199" bottom="3308" left="2212" right="2258" shear="0" text="@thorn"/>
+    </TextLine>
+    <TextLine no="23" top="3272" bottom="3365" left="624" right="881" shear="0">
+        <Word no="1" top="3272" bottom="3365" left="624" right="881" shear="0" text="middan"/>
+    </TextLine>
+</Image>

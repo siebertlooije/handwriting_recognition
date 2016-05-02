@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding = "UTF-8"?>
+<Image name="Stanford-CCCC_0044">
+    <TextLine no="1" top="860" bottom="955" left="127" right="269" shear="0">
+        <Word no="1" top="860" bottom="955" left="127" right="217" shear="0" text="On">
+            <Character no="1" top="860" bottom="955" left="127" right="180" shear="0" text="O"/>
+            <Character no="2" top="860" bottom="955" left="180" right="218" shear="0" text="n"/>
+        </Word>
+        <Word no="2" top="888" bottom="953" left="227" right="269" shear="0" text="d">
+            <Character no="1" top="888" bottom="953" left="227" right="270" shear="0" text="d"/>
+        </Word>
+    </TextLine>
+    <TextLine no="2" top="1324" bottom="1373" left="566" right="616" shear="0">
+        <Word no="1" top="1324" bottom="1373" left="566" right="616" shear="0" text="a">
+            <Character no="1" top="1324" bottom="1373" left="566" right="617" shear="0" text="a"/>
+        </Word>
+    </TextLine>
+    <TextLine no="3" top="2428" bottom="2491" left="946" right="1013" shear="0">
+        <Word no="1" top="2428" bottom="2491" left="946" right="1013" shear="0" text="de">
+            <Character no="1" top="2428" bottom="2491" left="946" right="984" shear="0" text="d"/>
+            <Character no="2" top="2428" bottom="2491" left="984" right="1014" shear="0" text="e"/>
+        </Word>
+    </TextLine>
+</Image>
