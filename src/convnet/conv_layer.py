@@ -18,11 +18,11 @@ from mlp import HiddenLayer
 
 class conv_layer(object):
 
-    def __init__(self, rng, input, filter_shape, image_shape, \
+    def __init__(self, rng, input, filter_shape, image_shape=None, \
                  pooling=False, poolsize=None,\
                  activation=T.nnet.relu, W=None, b=None, keepDims=False):
-
-        assert image_shape[1] == filter_shape[1] # Depth of image in batch has to match filter depth
+        if image_shape is not None:
+            assert image_shape[1] == filter_shape[1] # Depth of image in batch has to match filter depth
 
         # there are "num input feature maps * filter height * filter width"
         # inputs to each hidden unit
