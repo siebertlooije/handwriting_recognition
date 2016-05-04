@@ -43,6 +43,8 @@ from conv_layer import conv_layer
 import six.moves.cPickle as pickle
 import matplotlib.pyplot as plt
 
+import theano.typed_list as typed_list
+
 from spatial_pyramid_pooling import SPP
 from PIL import Image
 
@@ -53,57 +55,55 @@ def load_char_data():
     labels = []
     for line in open('../toolbox/labels.txt'):
         path, label = line.split()
-        imgs.append(numpy.asarray(Image.open(path)))
-        labels.append(int(label))
-
-    data = shuffle(zip(imgs, labels))
+        try:
+            imgs.append(numpy.asarray(Image.open(path), dtype=theano.config.floatX).transpose((2, 0, 1)))
+            labels.append(int(label))
+        except IOError:
+            print(path + ' gives trouble...')
+    data = zip(imgs, labels)
+    shuffle(data)
+    print(type(zip(imgs, labels)))
 
     imgs, labels = zip(*data)
+    imgs = list(imgs)
+    labels = list(labels)
+
+    max_rows = max([img.shape[1] for img in imgs])
+    max_col = max([img.shape[2] for img in imgs])
+
+    crop_idxs = numpy.zeros((len(imgs), 2))
+    for idx, img in enumerate(imgs):
+        crop_idxs[0] = img.shape[1]
+        crop_idxs[1] = img.shape[2]
+        npad = ((0, 0), (0, max_rows - img.shape[1]), (0, max_col - img.shape[2]))
+        imgs[idx] = numpy.pad(img, pad_width=npad, mode='constant')
+
+    imgs = numpy.asarray(imgs)
 
     train_x = imgs[0:int(.6 * len(imgs))]
     train_y = labels[0:int(.6 * len(imgs))]
+    crop_tr = crop_idxs[0:int(.6 * len(crop_idxs))]
 
     test_x = imgs[int(.6 * len(imgs)):int(.8 * len(imgs))]
     test_y = labels[int(.6 * len(imgs)):int(.8 * len(imgs))]
+    crop_te = crop_idxs[int(.6 * len(imgs)):int(.8 * len(imgs))]
 
-    val_x = imgs[int(.6 * len(imgs)):int(.8 * len(imgs))]
-    val_y = labels[int(.6 * len(imgs)):int(.8 * len(imgs))]
+    val_x = imgs[int(.8 * len(imgs)):]
+    val_y = labels[int(.8 * len(imgs)):]
+    crop_va = crop_idxs[int(.8 * len(imgs)):]
 
-    def shared_dataset(data, labels, borrow=True):
-
-        shared_data = [theano.shared(img.reshape(1, 1 if len(img.shape) == 2 else 3, img.shape[-2], img.shape[-1]),
-                                     dtype=theano.config.floatX)
-                       for img in data]
+    def shared_dataset(data, labels, idxs, borrow=True):
+        shared_data = theano.shared(data, borrow=True)
         shared_labels = theano.shared(numpy.asarray(labels,
-                                                    dtype=theano.config.floatX))
-        return shared_data, T.cast(shared_labels, 'int32')
+                                                    dtype=theano.config.floatX), borrow=True)
+        shared_idxs = theano.shared(idxs, borrow=True)
+        return shared_data, T.cast(shared_labels, 'int32'), T.cast(shared_idxs, 'int32')
 
-    train_x_r, train_y_r = shared_dataset(train_x, train_y)
-    test_x_r, test_y_r = shared_dataset(test_x, test_y)
-    val_x_r, val_y_r = shared_dataset(val_x, val_y)
+    train_x_r, train_y_r = shared_dataset(train_x, train_y, crop_tr)
+    test_x_r, test_y_r = shared_dataset(test_x, test_y, crop_te)
+    val_x_r, val_y_r = shared_dataset(val_x, val_y, crop_va)
 
-    return train_x_r, train_y_r, test_x_r, test_y_r, val_x_r, val_y_r
-
-
-def load_latline_dataset():
-    f = open('data.pickle', 'rb')
-
-    train_data, train_labels, test_data, test_labels, val_data, val_labels = pickle.load(f)
-
-    def shared_dataset(data, labels, borrow=True):
-        shared_data     = theano.shared(numpy.asarray(data,
-                                                      dtype=theano.config.floatX))
-        shared_labels   = theano.shared(numpy.asarray(labels,
-                                                      dtype=theano.config.floatX))
-        return shared_data, shared_labels
-
-    train_x, train_y = shared_dataset(train_data, train_labels)
-    test_x, test_y  = shared_dataset(test_data, test_labels)
-    val_x, val_y = shared_dataset(val_data, val_labels)
-
-    rval = [(train_x, train_y), (test_x, test_y), (val_x, val_y)]
-    return rval, len(train_data.shape) - 1, [1, train_data.shape[1]]
-
+    return ((train_x_r, train_y_r), (val_x_r, val_y_r), (test_x_r, test_y_r)), max_rows, max_col
 
 
 def gradient_updates_momentum(cost, params, learning_rate, momentum):
@@ -147,7 +147,7 @@ def gradient_updates_momentum(cost, params, learning_rate, momentum):
 
 def evaluate_convnet(learning_rate=0.02, n_epochs=2000,
                     dataset='single_sphere',
-                    nkerns=[32, 64, 64, 128], batch_size=500,
+                    nkerns=[32, 64, 64, 128], batch_size=128,
                     filter_shapes=[[5, 5], [5, 5], [3, 3], [3, 3]], momentum=0.9, half_time=500):
     """ Demonstrates lenet on MNIST dataset
 
@@ -167,7 +167,7 @@ def evaluate_convnet(learning_rate=0.02, n_epochs=2000,
 
     rng = numpy.random.RandomState(23455)
 
-    datasets, depth_dim, conv_dims = load_latline_dataset() # << TODO implement
+    datasets, max_row, max_col = load_char_data() #load_latline_dataset() # << TODO implement
 
     train_set_x, train_set_y = datasets[0]
     valid_set_x, valid_set_y = datasets[1]
@@ -185,8 +185,10 @@ def evaluate_convnet(learning_rate=0.02, n_epochs=2000,
     index = T.lscalar()  # index to a [mini]batch
 
     # start-snippet-1
-    x = T.matrix('x')   # the data is presented as spiking of sensors at lateral line
-    y = T.matrix('y')   # The output is the distance (in x- and y-directions) of sphere
+    x = T.tensor4('x')   # the data is presented as spiking of sensors at lateral line
+    y = T.ivector('y')   # The output is the distance (in x- and y-directions) of sphere
+
+    idxs = T.matrix('idxs')
 
     ######################
     # BUILD ACTUAL MODEL #
@@ -194,21 +196,16 @@ def evaluate_convnet(learning_rate=0.02, n_epochs=2000,
     print('... building the model')
 
     # Reshape matrix of sensor detections to a 4D tensor
-    layer0_input = x.reshape((batch_size, depth_dim, conv_dims[0], conv_dims[1]))
+    layer0_input = x # x.reshape((batch_size, depth_dim, conv_dims[0], conv_dims[1]))
 
     # Construct the first convolutional pooling layer:
     # filtering reduces the image size to (28-5+1 , 28-5+1) = (24, 24)
     # maxpooling reduces this further to (24/2, 24/2) = (12, 12)
     # 4D output tensor is thus of shape (batch_size, nkerns[0], 12, 12)
-    print (nkerns[0], depth_dim, filter_shapes[0][0], filter_shapes[0][1])
-
-    print (batch_size, depth_dim, conv_dims[0], conv_dims[1])
-    print (nkerns[0], depth_dim, filter_shapes[0][0], filter_shapes[0][1])
-
     layer0 = conv_layer(
         rng,
         input=layer0_input,
-        image_shape=None,
+        image_shape=(batch_size, 3, max_row, max_col),
         filter_shape=(nkerns[0], 3, filter_shapes[0][0], filter_shapes[0][1]),
         pooling=False,
         activation=T.nnet.relu
@@ -222,7 +219,7 @@ def evaluate_convnet(learning_rate=0.02, n_epochs=2000,
     layer1 = conv_layer(
         rng,
         input=layer0.output,
-        image_shape=None,
+        image_shape=(batch_size, nkerns[0], max_row, max_col),
         filter_shape=(nkerns[1], nkerns[0], filter_shapes[1][0], filter_shapes[1][1]),
         pooling=True,
         poolsize=(2, 2),
@@ -233,7 +230,7 @@ def evaluate_convnet(learning_rate=0.02, n_epochs=2000,
     layer1b = conv_layer(
         rng,
         input=layer1.output,
-        image_shape=None,
+        image_shape=(batch_size, nkerns[1], max_row, max_col),
         filter_shape=(nkerns[2], nkerns[1], filter_shapes[2][0], filter_shapes[2][1]),
         pooling=False,
         activation=T.nnet.relu,
@@ -243,14 +240,14 @@ def evaluate_convnet(learning_rate=0.02, n_epochs=2000,
     layer1c = conv_layer(
         rng,
         input=layer1b.output,
-        image_shape=None,
+        image_shape=(batch_size, nkerns[2], max_row, max_col),
         filter_shape=(nkerns[3], nkerns[2], filter_shapes[3][0], filter_shapes[3][1]),
         pooling=False,
         activation=T.nnet.relu,
         keepDims=True
     )
 
-    spp_layer = SPP(layer1c.output)
+    spp_layer = SPP(layer1c.output, idxs)
 
     # the HiddenLayer being fully-connected, it operates on 2D matrices of
     # shape (batch_size, num_pixels) (i.e matrix of rasterized images).
@@ -270,24 +267,25 @@ def evaluate_convnet(learning_rate=0.02, n_epochs=2000,
     layer3 = LogisticRegression(input=layer2.output, n_in=500, n_out=39)
 
     # linear regression by using a fully connected layer
-    layer3 = HiddenLayer(
+    '''layer3 = HiddenLayer(
         rng,
         input=layer2.output,
         n_in=conv_dims[1] * 2,
         n_out=2,
         activation=None
     )
+    '''
 
     # classify the values of the fully-connected sigmoidal layer
     #layer3 = LogisticRegression(input=layer2.output, n_in=500, n_out=10)
 
     # the cost we minimize during training is the NLL of the model
-    cost = layer3.mean_squared_error(y)
+    cost = layer3.negative_log_likelihood(y)
 
     # create a function to compute the mistakes that are made by the model
     test_model = theano.function(
         [index],
-        cost,
+        layer3.errors(y),
         givens={
             x: test_set_x[index * batch_size: (index + 1) * batch_size],
             y: test_set_y[index * batch_size: (index + 1) * batch_size]
@@ -296,7 +294,7 @@ def evaluate_convnet(learning_rate=0.02, n_epochs=2000,
 
     validate_model = theano.function(
         [index],
-        cost,
+        layer3.errors(y),
         givens={
             x: valid_set_x[index * batch_size: (index + 1) * batch_size],
             y: valid_set_y[index * batch_size: (index + 1) * batch_size]
@@ -305,7 +303,7 @@ def evaluate_convnet(learning_rate=0.02, n_epochs=2000,
 
     demo_model = theano.function(
         [index],
-        [layer3.output, y],
+        [layer3.y_pred, y],
         givens={
             x: test_set_x[index * batch_size: (index + 1) * batch_size],
             y: test_set_y[index * batch_size: (index + 1) * batch_size]
@@ -331,7 +329,6 @@ def evaluate_convnet(learning_rate=0.02, n_epochs=2000,
     l_r = T.scalar('l_r', dtype=theano.config.floatX)
 
     updates = gradient_updates_momentum(cost, params, l_r, momentum)
-
 
     train_model = theano.function(
         [index, l_r],
@@ -387,9 +384,9 @@ def evaluate_convnet(learning_rate=0.02, n_epochs=2000,
                 validation_losses = [validate_model(i) for i
                                      in range(n_valid_batches)]
                 this_validation_loss = numpy.mean(validation_losses)
-                print('epoch %i, minibatch %i/%i, MSE %f ' %
+                print('epoch %i, minibatch %i/%i, validation error %f %%' %
                       (epoch, minibatch_index + 1, n_train_batches,
-                       this_validation_loss))
+                       this_validation_loss * 100.))
 
                 # if we got the best validation score until now
                 if this_validation_loss < best_validation_loss:
@@ -409,10 +406,10 @@ def evaluate_convnet(learning_rate=0.02, n_epochs=2000,
                         for i in range(n_test_batches)
                     ]
                     test_score = numpy.mean(test_losses)
-                    print(('     epoch %i, minibatch %i/%i, test MSE of '
-                           'best model %f ') %
+                    print(('     epoch %i, minibatch %i/%i, test error of '
+                           'best model %f %%') %
                           (epoch, minibatch_index + 1, n_train_batches,
-                           test_score))
+                           test_score * 100.))
 
             if patience <= iter:
                 done_looping = True
