@@ -69,6 +69,9 @@ if __name__ == "__main__":
     model.compile(optimizer=sgd, loss='categorical_crossentropy')
 
     feature_data = {}
+
+    features = []
+    labels = []
     for i, line in enumerate(open('../toolbox/labels.txt')):
         path, label = line.split()
         try:
@@ -79,6 +82,7 @@ if __name__ == "__main__":
             print(path + ' gives trouble...')
             continue
 
+        im = im[:, :, ::-1]
         im[:, :, 0] -= 103.939
         im[:, :, 1] -= 116.779
         im[:, :, 2] -= 123.68
@@ -89,10 +93,11 @@ if __name__ == "__main__":
         print "Computing keras result... Im shape:", im.shape,
         keras_result = model.predict(im.reshape((1, im.shape[0], im.shape[1], im.shape[2])))
         print 'result shape', keras_result.shape
-        feature_data[path] = (np.mean(keras_result, axis=(0, 2, 3)), int(label))
+        features.append(np.mean(keras_result, axis=(2, 3)))
+        labels.append(int(label))
 
     feature_file = open('c_features_keras.pkl', 'wb')
-    pickle.dump(feature_data, feature_file)
+    pickle.dump((np.asarray(features), np.asarray(labels, dtype='int64')), feature_file)
     feature_file.close()
 
     #out = model.predict(im)
