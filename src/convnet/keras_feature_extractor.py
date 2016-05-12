@@ -93,10 +93,10 @@ if __name__ == "__main__":
         print "Computing keras result... Im shape:", im.shape,
         keras_result = model.predict(im.reshape((1, im.shape[0], im.shape[1], im.shape[2])))
         print 'result shape', keras_result.shape
-        features.append(np.mean(keras_result, axis=(2, 3)))
+        features.append(np.mean(keras_result, axis=(2)).transpose((0, 2, 1)))
         labels.append(int(label))
 
-    feature_file = open('c_features_keras.pkl', 'wb')
+    feature_file = open('c_features_keras_2.pkl', 'wb')
     pickle.dump((np.asarray(features), np.asarray(labels, dtype='int64')), feature_file)
     feature_file.close()
 
