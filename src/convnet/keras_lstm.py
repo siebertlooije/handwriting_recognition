@@ -100,11 +100,11 @@ if __name__ == "__main__":
 
     print "Compiled model"
     model.compile(loss='categorical_crossentropy',
-                  optimizer=sgd,
+                  optimizer='rmsprop',
                   metrics=['accuracy'])
 
     print "Train model"
-    model.fit([trainX,trainX], trainY,batch_size=32,validation_split=0.1)
+    model.fit([trainX,trainX], trainY,batch_size=32,validation_split=0.1, nb_epoch=1000)
     print "Test model"
     score,accuracy = model.evaluate([testX,testX],testY,batch_size=32)
     print 'accuracy : ' + str(accuracy)
