@@ -19,8 +19,8 @@ from PIL import Image
 
 import numpy as np
 
-label_dict = {'!': 1, '#' : 2, '$' : 3, '&': 4, '*': 5, ',': 6, '-' : 7, '.': 8, '4' : 9, ':' : 10, ';' : 11, '?' : 12,
-              '\\' : 13, '^': 14, 'a': 15, 'b': 16, 'c': 17, 'd' : 18, 'e' : 19, 'f' : 20, 'g' : 21, 'h' : 22, 'i' : 23,
+label_dict = {'!': 1, '#' : 2, '$' : 3, '&': 4, '*': 5, ',': 6, '-' : 7, '.': 8, '4' : 9, ':' : 10, 'pk' : 11, '?' : 12,
+              'bb' : 13, '^': 14, 'a': 15, 'b': 16, 'c': 17, 'd' : 18, 'e' : 19, 'f' : 20, 'g' : 21, 'h' : 22, 'i' : 23,
               'k' : 24, 'l' : 25, 'm' : 26, 'n' : 27, 'o' : 28, 'p' : 29, 'q' : 30, 'r' : 31, 's' : 32, 't' : 33,
               'u' : 34, 'v' : 35, 'w' : 36, 'x' : 37, 'y' : 38, 'z' : 39}
 
@@ -45,7 +45,7 @@ def extractImages(wordfile, imgfile, l_file):
             cropped = img.crop((word.left, word.top, word.right, word.bottom))  # croplib.crop(img, word.left, word.top, word.right, word.bottom)
 
             out_path = out_str + '_l' + str(line_idx) + '_w' + str(word_idx) + '_t_' + word.text + IM_EXT
-            cropped.save(out_path)
+            cropped.save(out_path.replace('/crops', '/crops/words'))
 
             for idx, char in enumerate(word.characters):
                 cropped = img.crop((char.left, char.top, char.right, char.bottom))  # croplib.crop(img, word.left, word.top, word.right, word.bottom)
@@ -85,25 +85,38 @@ def extractImages(wordfile, imgfile, l_file):
 
                 sub_cropped = cropped.crop((left, top, right, bottom))
 
-                out_path = out_str + '_l' + str(line_idx) + '_w' + str(word_idx) + '_c' + str(idx) + '_t_' + char.text + IM_EXT
+                char_string = char.text.lower() #.lower() #if char.text is not '\\' else 'bb'
+                if char_string == '\\':
+                    char_string = 'bb'
+                if char.text == ';':
+                    char_string = 'pk'
+                if char.text == "":
+                    print 'It\'s empty!'
+                    continue
+                if char.text in ['-', ',', '4', '?', '!', ':', ';', '^', '\\']:
+                    print 'ignoring ' + char.text
+                    continue
+
+                if char_string not in 'abcdefghijklmnopqrstuvwxyz':
+                    continue
+
+                out_path = out_str + '_l' + str(line_idx) + '_w' + str(word_idx) + '_c' + str(idx) + '_t_' + char_string + IM_EXT
                 try:
-                    sub_cropped.save(out_path)
+                    sub_cropped.save(out_path.replace('/crops', '/crops/letters'))
                 except SystemError:
                     print 'bad annotation...'
 
-
-                if char.text in word_log:
-                    word_log[char.text.lower()] += 1
+                if char_string in word_log:
+                    word_log[char_string] += 1
                 else:
-                    word_log[char.text.lower()] = 1
+                    word_log[char_string] = 1
 
-                if char.text.lower() in label_dict:
-                    l_file.write(out_str + ' ' + str(label_dict[char.text.lower()] - 1) + '\n')
+                if char_string in label_dict:
+                    l_file.write(out_path + ' ' + str(ord(char_string) - ord('a')) + '\n')
 
 if __name__ == "__main__":
 
     label_file = open('labels.txt', 'w')
-    label_file.write('# label file\n')
 
 
     print 'Cropping...'
