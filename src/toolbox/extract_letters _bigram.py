@@ -26,6 +26,23 @@ label_dict = {'!': 1, '#' : 2, '$' : 3, '&': 4, '*': 5, ',': 6, '-' : 7, '.': 8,
 
 word_log = {}
 
+
+def extractWords(wordfile):
+    lines, _ = wordio.read(wordfile)
+    assert pth.exists('../crops/')
+    word_array = []
+    for line_idx, line in enumerate(lines):
+        for word_idx, word in enumerate(line):
+            temp_word = ""
+            for char_idx, char in enumerate(word.characters):
+                if (re.match("^[a-zA-Z]", char.text)):
+                    char.text = char.text.decode('utf-8', 'ignore').encode("utf-8").lower()
+                    temp_word = temp_word + char.text
+        word_array.append(temp_word)
+
+    return word_array
+
+
 def extractImages(wordfile, imgfile, l_file, monogram, bigram, trigram):
     print wordfile
     lines, _ = wordio.read(wordfile)
@@ -80,10 +97,29 @@ if __name__ == "__main__":
     monogram = {}
     bigram = {}
     trigram = {}
-
+    word_array = []
     print 'Cropping...'
     assert pth.exists('../charannotations/KNMP') and pth.exists('../charannotations/Stanford')
 
+    for f in listdir('../charannotations/KNMP'):
+        wordfile = '../charannotations/KNMP/' + f
+        words = extractWords(wordfile)
+        word_array.extend(words)
+
+    for f in listdir('../charannotations/Stanford'):
+        wordfile = '../charannotations/Stanford/' + f
+        word_array.extend(extractWords(wordfile))
+
+
+    word_array= list(set(word_array))
+    print word_array
+    with open('vocabulary.pickle', 'wb') as handle:
+        pickle.dump(word_array, handle)
+
+
+
+
+    """
     for f in listdir('../charannotations/KNMP'):
         wordfile = '../charannotations/KNMP/' + f
         imgfile = wordfile.replace('.words', IM_EXT).replace('/charannotations', '/pages').replace('2C20', '2C2O')
@@ -114,4 +150,4 @@ if __name__ == "__main__":
     with open('bigram.pickle', 'wb') as handle:
         pickle.dump(bigram, handle)
     with open('trigram.pickle', 'wb') as handle:
-        pickle.dump(trigram, handle)
+        pickle.dump(trigram, handle)"""
