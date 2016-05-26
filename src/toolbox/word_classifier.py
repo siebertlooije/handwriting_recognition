@@ -6,7 +6,9 @@ from PIL import Image
 from keras.layers import *
 from keras.layers.core import Merge
 import os.path as pth
+from skimage.util import img_as_ubyte
 import wordio
+from skimage.filters import threshold_otsu
 
 import sys
 from scipy.signal import argrelextrema
@@ -33,6 +35,42 @@ class N_gram(object):
     def followed_by(self, other):
         return other.start == self.end
 
+def get_monograms_otsu(img, cropped):
+    otsu_img = img_as_ubyte(np.copy(np.asarray(cropped.convert('L'))))
+    try:
+        threshold_global_otsu = threshold_otsu(otsu_img)
+    except TypeError:
+        print 'Something weird happened'
+        continue
+    global_otsu = np.array(otsu_img >= threshold_global_otsu).astype(np.int64)
+
+    hist = np.zeros(global_otsu.shape[1])
+    for col in range(global_otsu.shape[1]):
+        max_white = 0
+        white = 0
+        for row in range(global_otsu.shape[0]):
+            white += 1 if global_otsu[row, col] == 1 else 0
+            max_white = max(white, max_white)
+        hist[col] = max_white
+
+    hist = np.convolve(hist, 5 * [1 / 5.], 'same') / 25
+
+    for idx in range(1, len(hist) - 1):
+        if hist[idx] == hist[idx + 1] and hist[idx - 1] < hist[idx]:
+            hist[idx] = (hist[idx + 1] + hist[idx - 1]) / 2
+
+    maxes = argrelextrema(hist, np.greater)
+
+    monograms = []
+
+    cuts = maxes[0]
+    for idx, cut in enumerate(cuts):
+        for next in cuts[idx + 1:]:
+            print next, cut
+            if 10 < next - cut:
+                monograms.append(N_gram(img[:, cut:next], cut, next))
+
+    return monograms, cuts[0], cuts[-1]
 
 def get_monograms(img):
     hist = np.mean(img, axis=(0, 2))
@@ -212,7 +250,7 @@ if __name__ == "__main__":
             cropped = img.crop((word.left, word.top, word.right, word.bottom))
             color = np.copy(np.asarray(cropped))
 
-            monograms, start, end = get_monograms(color)
+            monograms, start, end = get_monograms_otsu(color, cropped)
 
             for mg in monograms:
                 im = 255 - mg.im[:, :, ::-1]
@@ -229,7 +267,7 @@ if __name__ == "__main__":
 
                 feature_seq, _ = pad_sequences([features], maxlen=31, dim=1024)
 
-                lstm_output = lstm_model.predict_classes([feature_seq, feature_seq], batch_size=1)
+                lstm_output = lstm_model.predict_classes([feature_seq, feature_seq], batch_size=1, verbose=0)
 
                 letter = chr(lstm_output[0] + ord('a'))
 
@@ -238,22 +276,20 @@ if __name__ == "__main__":
 
                 #print mg.prediction
 
-            N_grams = monograms
-
             words = []
 
-            def build_words(wrd, N_grams, start, end):
+            def build_words(wrd, monograms, start, end):
                 if wrd is None:
-                    for g in N_grams:
+                    for g in monograms:
                         if g.start == start:
-                            build_words(g, N_grams, start, end)
+                            build_words(g, monograms, start, end)
                     return
                 if wrd.end == end:
                     words.append(wrd)
                     return
-                for g in N_grams:
+                for g in monograms:
                     if wrd.followed_by(g):
-                        build_words(wrd.combine(g), N_grams, start, end)
+                        build_words(wrd.combine(g), monograms, start, end)
 
             build_words(None, N_grams, start, end)
 
