@@ -5,19 +5,21 @@ from keras.optimizers import SGD
 import cv2, numpy as np
 from PIL import Image
 
+import matplotlib.pyplot as plt
+
 def VGG_16(weights_path=None):
     model = Sequential()
     model.add(ZeroPadding2D((1,1),input_shape=(3,None,None)))   #0
-    model.add(Convolution2D(64, 3, 3, activation='relu'))       #1
+    model.add(Convolution2D(64, 3, 3, activation='relu'))       #1  -1
     model.add(ZeroPadding2D((1,1)))                             #2
-    model.add(Convolution2D(64, 3, 3, activation='relu'))       #3
-    model.add(MaxPooling2D((2,2), strides=(2,2)))               #4
+    model.add(Convolution2D(64, 3, 3, activation='relu'))       #3  -2
+    model.add(MaxPooling2D((2,2), strides=(2,2)))               #4  /2
 
     model.add(ZeroPadding2D((1,1)))                             #5
-    model.add(Convolution2D(128, 3, 3, activation='relu'))      #6
+    model.add(Convolution2D(128, 3, 3, activation='relu'))      #6  -1
     model.add(ZeroPadding2D((1,1)))                             #7
-    model.add(Convolution2D(128, 3, 3, activation='relu'))      #8
-    model.add(MaxPooling2D((2,2), strides=(2,2)))               #9
+    model.add(Convolution2D(128, 3, 3, activation='relu'))      #8  -2
+    model.add(MaxPooling2D((2,2), strides=(2,2)))               #9  /2
 
     model.add(ZeroPadding2D((1,1)))                             #10
     model.add(Convolution2D(256, 3, 3, activation='relu'))      #11
@@ -91,13 +93,20 @@ if __name__ == "__main__":
 
         # run lasagne
         print "Computing keras result... Im shape:", im.shape,
+        #plt.imshow(im.transpose((1, 2, 0)))
+        #splt.show()
         keras_result = model.predict(im.reshape((1, im.shape[0], im.shape[1], im.shape[2])))
         print 'result shape', keras_result.shape
-        features.append(np.mean(keras_result, axis=2).transpose((0, 2, 1)))
-        #print features[0].shape
+
+        if keras_result.shape[2] < 2:
+            continue
+
+        features.append(
+            np.concatenate((np.max(keras_result[:, :, :keras_result.shape[2] / 2, :], axis=2),
+                            np.max(keras_result[:, :, keras_result.shape[2] / 2:, :], axis=2)), axis=1).transpose((0, 2, 1)))
         labels.append(int(label))
 
-    feature_file = open('c_features_keras.pkl', 'wb')
+    feature_file = open('c_features_keras_c.pkl', 'wb')
     pickle.dump((features, np.asarray(labels, dtype='int64')), feature_file)
     feature_file.close()
 
