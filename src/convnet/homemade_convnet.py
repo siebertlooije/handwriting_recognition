@@ -8,6 +8,9 @@ from PIL import Image
 from keras.utils.np_utils import to_categorical
 import matplotlib.pyplot as plt
 
+import os
+import os.path
+
 import keras_lstm
 
 def visualize_data_sizes():
@@ -48,25 +51,25 @@ def init_model(Xshape, Yshape) :
     print 'initializing model...'
 
     model = Sequential()
-    model.add(ZeroPadding2D((1,1),input_shape=(Xshape)))   #0
-    model.add(Convolution2D(64, 3, 3, activation='relu'))       #1
-    model.add(ZeroPadding2D((1,1)))                             #2
-    model.add(Convolution2D(64, 3, 3, activation='relu'))       #3
+    model.add(ZeroPadding2D((2,2),input_shape=(Xshape)))   #0
+    model.add(Convolution2D(64, 5, 5, activation='relu'))       #1
+    model.add(ZeroPadding2D((2,2)))                             #2
+    model.add(Convolution2D(64, 5, 5, activation='relu'))       #3
     model.add(MaxPooling2D((2,2), strides=(1,1)))               #4
 
     model.add(ZeroPadding2D((1,1)))                             #5
-    model.add(Convolution2D(128, 3, 3, activation='relu'))      #6
+    model.add(Convolution2D(64, 3, 3, activation='relu'))      #6
     model.add(ZeroPadding2D((1,1)))                             #7
     model.add(Convolution2D(128, 3, 3, activation='relu'))      #8
     model.add(MaxPooling2D((2,2), strides=(1,1)))               #9
 
-    model.add(ZeroPadding2D((1,1)))                             #10
-    model.add(Convolution2D(256, 3, 3, activation='relu'))      #11
-    model.add(ZeroPadding2D((1,1)))                             #12
-    model.add(Convolution2D(256, 3, 3, activation='relu'))      #13
-    model.add(ZeroPadding2D((1,1)))                             #14
-    model.add(Convolution2D(256, 3, 3, activation='relu'))      #15
-    model.add(MaxPooling2D((2,2), strides=(1,1)))               #16
+    # model.add(ZeroPadding2D((1,1)))                             #10
+    # model.add(Convolution2D(256, 3, 3, activation='relu'))      #11
+    # model.add(ZeroPadding2D((1,1)))                             #12
+    # model.add(Convolution2D(256, 3, 3, activation='relu'))      #13
+    # model.add(ZeroPadding2D((1,1)))                             #14
+    # model.add(Convolution2D(256, 3, 3, activation='relu'))      #15
+    # model.add(MaxPooling2D((2,2), strides=(1,1)))               #16
 
     # model.add(ZeroPadding2D((1,1)))                             #17
     # model.add(Convolution2D(512, 3, 3, activation='relu'))      #18
@@ -90,7 +93,7 @@ def init_model(Xshape, Yshape) :
 
     model.add(Dense(Yshape, activation='softmax'))
 
-    sgd = SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
+    sgd = SGD(lr=0.001, decay=1e-6, momentum=0.9, nesterov=True)
     model.compile(optimizer=sgd, 
         loss='categorical_crossentropy',
         metrics=['accuracy'])
@@ -111,8 +114,8 @@ def resize_dataset(width, height) :
             print(path + ' gives trouble...')
             continue
 
-    X = np.zeros((counter, 3, width, height))
-    Y = np.zeros((counter, 3, width, height), dtype = int)
+    X = np.zeros((counter, 3, height, width))
+    Y = np.zeros((counter, 3, height, width), dtype = int)
     
     total = counter
     print str(total) + ' images found'
@@ -122,25 +125,31 @@ def resize_dataset(width, height) :
         path, label = line.split()
         try:
 
-            im = np.asarray(Image.open(path.replace('/crops', '/crops/letters')), dtype=np.float32) # 
-            
-            im = 255 - im[:, :, :]
+            im = np.asarray(Image.open(path.replace('/crops', '/crops/letters'))) # , dtype=np.float32
 
-            if im.shape[0] <= width :
-                im = np.pad(im, ((0,width-im.shape[0]), (0,0), (0,0)), mode='constant', constant_values=0)
-            else :
-                im = scipy.misc.imresize(im, (width, im.shape[1], im.shape[2]))
+            # im = 255 - im[:, :, :]
+            im = im[:, :, :] - 126
+            im = im[:, :, :] / 126
 
-            if im.shape[1] <= height :
-                im = np.pad(im, ((0,0), (0,height-im.shape[1]), (0,0)), mode='constant', constant_values=0)
-            else :
-                im = scipy.misc.imresize(im, (im.shape[0], height, im.shape[2]))
+            # if im.shape[0] <= height :
+            #     im = np.pad(im, ((0,height-im.shape[0]), (0,0), (0,0)), mode='constant', constant_values=0)
+            # else :
+            im = scipy.misc.imresize(im, (height, im.shape[1], im.shape[2]))
+
+            # if im.shape[1] <= width :
+            # im = np.pad(im, ((0,0), (0,width-im.shape[1]), (0,0)), mode='constant', constant_values=0)
+            # else :
+            im = scipy.misc.imresize(im, (im.shape[0], width, im.shape[2]))
+
+            #plt.imshow(im)
+            #plt.show()
+
 
             im = im.transpose((2, 0, 1))
             
             X[counter] = im
             Y[counter] = label
-            
+
 
 
             counter += 1
@@ -156,7 +165,7 @@ def resize_dataset(width, height) :
     return X,Y
 
 if __name__ == "__main__":
-    width, height = 32, 32
+    width, height = 20, 50
 
     X,Y = resize_dataset(width, height)
     Y = to_categorical(np.asarray(Y))
@@ -164,6 +173,10 @@ if __name__ == "__main__":
     model = init_model(X.shape[1:], Y.shape[1])
 
 
-    model.fit(X, Y, batch_size = 32, nb_epoch = 10, validation_split= .1)
+    model.fit(X, Y, batch_size = 16, nb_epoch = 10, validation_split= .1)
+
+    filedir = os.path.join(os.getcwd())
+    filename = os.path.join(filedir, 'weights')
+    model.save_weights(filename)
     
     
