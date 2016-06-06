@@ -497,7 +497,7 @@ if __name__ == "__main__":
                            optimizer='rmsprop',
                            metrics=['accuracy'])
 
-    vocabulary = pickle.load(open('vocabulary.pickle'))
+    vocabulary = pickle.load(open('shen_vocabulary.pickle'))
     ngram_voc= extractNGrams(vocabulary)
 
 
