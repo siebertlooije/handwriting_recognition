@@ -122,6 +122,29 @@ def extractNGrams(words):
     ngram['bigram'] = bigrams_save
     return ngram
 
+def checkWordInNgrams2(word_array, dataset):
+    ngram_key = ['bigram','trigram','fourgram']
+    words_exist = list(word_array)
+
+    for word in word_array:
+        if len(word) < 2:
+            continue 
+        word_removed = False
+        for key in ngram_key:    
+            value_dict = dataset[key].iterkeys().next()
+            n = len(value_dict)
+            ngram_array = [word[j:j + n] for j in range(0, len(word) - 1, 1)]
+            for ngram in ngram_array:
+                if len(ngram) == n: #to be removed
+                    if ngram not in dataset[key]:
+                        words_exist.remove(word)
+                        word_removed = True
+                        break
+            if word_removed :
+                break
+
+    return words_exist
+
 def checkWordInNgrams(word_array, dataset):
     ngram_key = ['bigram','trigram','fourgram']
     words_exist = []
@@ -129,7 +152,7 @@ def checkWordInNgrams(word_array, dataset):
         length_word = len(word)
         for key in ngram_key:
                 if length_word < 2:
-                    return;
+                    return words_exist
                 else:
                     value_dict = dataset[key].iterkeys().next()
                     n = len(value_dict)

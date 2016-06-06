@@ -21,16 +21,16 @@ import scipy
 import distance
 from nltk.util import ngrams
 from ngram_checker import *
-
 class N_gram(object):
 
-    def __init__(self, im, start, end, prediction=None, confidence=None):
+    def __init__(self, im, start, end, prediction=None, confidence=None, options = None):
         self.im = im
         self.start = start
         self.end = end
 
         self.prediction = prediction
         self.confidence = confidence
+        self.options = options
 
     def set_prediction(self, pred):
         self.prediction = pred
@@ -38,12 +38,18 @@ class N_gram(object):
     def set_confidence(self, conf):
         self.confidence = conf
 
+    def set_options(self, opts):
+        self.options = opts
+
     def combine(self, other):
         return N_gram(self.im, self.start, other.end,
                       self.prediction + other.prediction, self.confidence + other.confidence)
 
     def get_confidence(self):
         return self.confidence / len(self.prediction)
+
+    def get_options(self):
+        return self.options
 
     def follows(self, other):
         return self.start == other.end
@@ -369,27 +375,49 @@ if __name__ == "__main__":
                         mg.set_prediction(letter)
                         mg.set_confidence(conv_confidences[0][conv_output[0]])
 
+
+
+                        if len(monograms) < 50 : #So that it isn't that slow/freezes
+                            threshold = 0.1
+                            
+                            convident_idcs = conv_confidences > threshold
+                            
+                            charlist = (convident_idcs * range(26))[convident_idcs] + ord('a')
+                            chars = [chr(char) for char in charlist]
+
+                            confs = (conv_confidences)[convident_idcs]
+                            options =  zip(chars, confs)
+                            mg.set_options(options)
+                        else :
+                            mg.set_options([(letter, mg.get_confidence())])
+
                 N_grams = monograms
 
                 words = []
 
-                def build_words(wrd, N_grams, start, end):
+                word_prediction = ''
+                print 'Target: ', word.text,
+
+                def build_words2(wrd, N_grams, start, end):
                     if wrd is None:
                         for g in N_grams:
                             if g.start == start:
-                                build_words(g, N_grams, start, end)
+                                for char, conf in g.get_options() :
+                                    cpy = N_gram(g.im, g.start, g.end, char, conf)
+                                    build_words2(cpy, N_grams, start, end)
                         return
                     if wrd.end == end:
                         words.append(wrd)
                         return
                     for idx, g in enumerate(N_grams):
                         if wrd.followed_by(g):
-                            build_words(wrd.combine(g), N_grams[idx:], start, end)
+                            for char, conf in g.get_options() :
+                                cpy = N_gram(g.im, g.start, g.end, char, conf)
+                                build_words2(wrd.combine(cpy), N_grams[idx:], start, end)
 
-                build_words(None, N_grams, start, end)
 
-                # print '... done'
-
+                build_words2(None, N_grams, start, end)
+                
                 words = sorted(words, key=lambda w: w.get_confidence())[::-1]
 
                 # for w in words[:10]:
@@ -399,55 +427,80 @@ if __name__ == "__main__":
                     print ''
                     continue
 
-                word_strings = [wrd.prediction for wrd in words[:10]]
+                word_strings = [wrd.prediction for wrd in words]
 
-                word_exists = checkWordInNgrams(word_strings, ngram_voc)
+                for wrd in word_strings:
+                    if wrd in vocabulary:
+                        word_prediction = wrd
+                        break
 
-                word_prediction = ''
-                print 'Target: ', word.text,
-                if len(word_exists) == 1:
-                    word_prediction = word_exists[0]
-                else:
-                    lev = calculateDistance(word_strings, vocabulary)
-                    #print type(lev)
-                    lev = sorted(lev.items(), key=operator.itemgetter(1))
-                    counter = 0
-                    # for k, v in lev[:10]:
-                    #    print "word:" + k + "   with score:" + str(v)
+                if word_prediction == '' :
+                    words = []
 
+                    def build_words(wrd, N_grams, start, end):
+                        if wrd is None:
+                            for g in N_grams:
+                                if g.start == start:
+                                    build_words(g, N_grams, start, end)
+                            return
+                        if wrd.end == end:
+                            words.append(wrd)
+                            return
+                        for idx, g in enumerate(N_grams):
+                            if wrd.followed_by(g):
+                                build_words(wrd.combine(g), N_grams[idx:], start, end)
 
-                    if lev == {}:
-                        if len(word_exists) >= 1:
-                            word_prediction = word_exists[0]
-                        else:
-                            word_prediction = words[0].prediction
+                    build_words(None, N_grams, start, end)
+                    
+                    words = sorted(words, key=lambda w: w.get_confidence())[::-1]
+
+                    word_strings = [wrd.prediction for wrd in words[:10]]
+
+                    word_exists = checkWordInNgrams2(word_strings, ngram_voc)
+                    
+                    if len(word_exists) == 1:
+                        word_prediction = word_exists[0]
                     else:
-                        closest = []
-                        minDist = min([l[1] for l in lev])
-                        for k, v in lev:
-                            if v == minDist:
-                                closest.append(k)
-                        if len(closest) == 1:
-                            word_prediction = closest[0]
-                        else:
-                            maxConf = 0
-                            final_prediction = ''
-                            for c in closest:
-                                for w in words:
-                                    if w.prediction == c and maxConf < w.get_confidence():
-                                        maxConf = w.get_confidence()
-                                        final_prediction = w.prediction
+                        lev = calculateDistance(word_strings, vocabulary)
+                        #print type(lev)
+                        lev = sorted(lev.items(), key=operator.itemgetter(1))
+                        counter = 0
+                        # for k, v in lev[:10]:
+                        #    print "word:" + k + "   with score:" + str(v)
 
-                            if final_prediction == '':
-                                if len(word_exists) >= 1:
-                                    word_prediction = word_exists[0]
-                                else:
-                                    word_prediction = words[0].prediction
+
+                        if lev == {}:
+                            if len(word_exists) >= 1:
+                                word_prediction = word_exists[0]
                             else:
-                                llev = calculateDistance([final_prediction], vocabulary)
-                                llev = sorted(llev.items(), key=operator.itemgetter(1))
-                                #print 'dictieeeee', llev[0][0]
-                                word_prediction = llev[0][0]
+                                word_prediction = words[0].prediction
+                        else:
+                            closest = []
+                            minDist = min([l[1] for l in lev])
+                            for k, v in lev:
+                                if v == minDist:
+                                    closest.append(k)
+                            if len(closest) == 1:
+                                word_prediction = closest[0]
+                            else:
+                                maxConf = 0
+                                final_prediction = ''
+                                for c in closest:
+                                    for w in words:
+                                        if w.prediction == c and maxConf < w.get_confidence():
+                                            maxConf = w.get_confidence()
+                                            final_prediction = w.prediction
+
+                                if final_prediction == '':
+                                    if len(word_exists) >= 1:
+                                        word_prediction = word_exists[0]
+                                    else:
+                                        word_prediction = words[0].prediction
+                                else:
+                                    llev = calculateDistance([final_prediction], vocabulary)
+                                    llev = sorted(llev.items(), key=operator.itemgetter(1))
+                                    #print 'dictieeeee', llev[0][0]
+                                    word_prediction = llev[0][0]
 
                 print ', prediction: ', word_prediction
                 matches += 1 if word.text.lower() == word_prediction else 0
