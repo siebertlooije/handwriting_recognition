@@ -1,26 +1,21 @@
 from keras.models import Sequential
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
 from keras.optimizers import SGD
-import numpy as np
-from PIL import Image
 from keras.layers import *
 from keras.layers.core import Merge
-import os.path as pth
 import wordio
 
-import sys
 from scipy.signal import argrelextrema
-from skimage.util import img_as_ubyte
 from skimage.filters import threshold_otsu
-import cPickle as pickle
 import h5py
 
 import matplotlib.pyplot as plt
 import scipy
 
-import distance
-from nltk.util import ngrams
 from ngram_checker import *
+
+from os import listdir
+
 class N_gram(object):
 
     def __init__(self, im, start, end, prediction=None, confidence=None, options = None):
@@ -257,6 +252,208 @@ def pad_sequences(sequences, maxlen=None, dim=1, dtype='int32',
                 raise ValueError("Padding type '%s' not understood" % padding)
     return x,maxlen
 
+
+def process_file(wordfile, imgfile):
+    n_words = matches = 0
+
+    lines, _ = wordio.read(wordfile)
+    img = Image.open(imgfile)
+
+    for line_idx, line in enumerate(lines):
+        for word_idx, word in enumerate(line):
+            n_words += 1
+
+            cropped = img.crop((word.left, word.top, word.right, word.bottom))
+            color = np.copy(np.asarray(cropped))
+
+            monograms, start, end = get_monograms_otsu(color, cropped)
+
+            if monograms is None:
+                continue
+
+            for mg in monograms:
+                if model == 'VGG':
+                    im = 255 - mg.im[:, :, ::-1]
+
+                    im[:, :, 0] -= 103.939
+                    im[:, :, 1] -= 116.779
+                    im[:, :, 2] -= 123.68
+
+                    im = im.transpose((2, 0, 1))
+                    convnet_output = conv_model.predict(im.reshape((1, im.shape[0], im.shape[1], im.shape[2])))
+
+                    features = np.concatenate(
+                        (np.max(convnet_output[:, :, :convnet_output.shape[2] / 2, :], axis=2),
+                         np.max(convnet_output[:, :, convnet_output.shape[2] / 2:, :], axis=2)),
+                        axis=1).transpose((0, 2, 1))
+
+                    feature_seq, _ = pad_sequences([features], maxlen=31, dim=1024)
+
+                    lstm_output = lstm_model.predict_classes([feature_seq, feature_seq], batch_size=1, verbose=0)
+
+                    letter = chr(lstm_output[0] + ord('a'))
+
+                    # print letter
+                    mg.set_prediction(letter)
+                else:
+                    width, height = 20, 50
+                    im = np.asarray(255 - mg.im, dtype=np.float32)
+                    im /= 255.
+
+                    im = scipy.misc.imresize(im, (height, im.shape[1], im.shape[2]))
+
+                    # if im.shape[1] <= width :
+                    # im = np.pad(im, ((0,0), (0,width-im.shape[1]), (0,0)), mode='constant', constant_values=0)
+                    # else :
+                    im = scipy.misc.imresize(im, (im.shape[0], width, im.shape[2]))
+
+                    # plt.imshow(im)
+                    # plt.show()
+
+                    im = 255 - np.asarray(im, dtype=np.float32)
+                    # im = im[:, :, :] - 126
+                    im /= 255.
+
+                    im = im.transpose((2, 0, 1))
+
+                    conv_output = conv_model.predict_classes(im.reshape((1, im.shape[0], im.shape[1], im.shape[2])),
+                                                             batch_size=1, verbose=0)
+                    conv_confidences = conv_model.predict(im.reshape((1, im.shape[0], im.shape[1], im.shape[2])),
+                                                          batch_size=1, verbose=0)
+                    letter = chr(conv_output[0] + ord('a'))
+
+                    mg.set_prediction(letter)
+                    mg.set_confidence(conv_confidences[0][conv_output[0]])
+
+                    if len(monograms) < 50:  # So that it isn't that slow/freezes
+                        threshold = 0.1
+
+                        convident_idcs = conv_confidences > threshold
+
+                        charlist = (convident_idcs * range(26))[convident_idcs] + ord('a')
+                        chars = [chr(char) for char in charlist]
+
+                        confs = (conv_confidences)[convident_idcs]
+                        options = zip(chars, confs)
+                        mg.set_options(options)
+                    else:
+                        mg.set_options([(letter, mg.get_confidence())])
+
+            N_grams = monograms
+
+            words = []
+
+            word_prediction = ''
+            print 'Target: ', word.text,
+
+            def build_words2(wrd, N_grams, start, end):
+                if wrd is None:
+                    for g in N_grams:
+                        if g.start == start:
+                            for char, conf in g.get_options():
+                                cpy = N_gram(g.im, g.start, g.end, char, conf)
+                                build_words2(cpy, N_grams, start, end)
+                    return
+                if wrd.end == end:
+                    words.append(wrd)
+                    return
+                for idx, g in enumerate(N_grams):
+                    if wrd.followed_by(g):
+                        for char, conf in g.get_options():
+                            cpy = N_gram(g.im, g.start, g.end, char, conf)
+                            build_words2(wrd.combine(cpy), N_grams[idx:], start, end)
+
+            build_words2(None, N_grams, start, end)
+
+            words = sorted(words, key=lambda w: w.get_confidence())[::-1]
+
+            # for w in words[:10]:
+            #    print w.prediction, w.get_confidence()
+
+            if len(words) == 0:
+                print ''
+                continue
+
+            word_strings = [wrd.prediction for wrd in words]
+
+            for wrd in word_strings:
+                if wrd in vocabulary:
+                    word_prediction = wrd
+                    break
+
+            if word_prediction == '':
+                words = []
+
+                def build_words(wrd, N_grams, start, end):
+                    if wrd is None:
+                        for g in N_grams:
+                            if g.start == start:
+                                build_words(g, N_grams, start, end)
+                        return
+                    if wrd.end == end:
+                        words.append(wrd)
+                        return
+                    for idx, g in enumerate(N_grams):
+                        if wrd.followed_by(g):
+                            build_words(wrd.combine(g), N_grams[idx:], start, end)
+
+                build_words(None, N_grams, start, end)
+
+                words = sorted(words, key=lambda w: w.get_confidence())[::-1]
+
+                word_strings = [wrd.prediction for wrd in words[:10]]
+
+                word_exists = checkWordInNgrams2(word_strings, ngram_voc)
+
+                if len(word_exists) == 1:
+                    word_prediction = word_exists[0]
+                else:
+                    lev = calculateDistance(word_strings, vocabulary)
+                    # print type(lev)
+                    lev = sorted(lev.items(), key=operator.itemgetter(1))
+                    counter = 0
+                    # for k, v in lev[:10]:
+                    #    print "word:" + k + "   with score:" + str(v)
+
+
+                    if lev == {}:
+                        if len(word_exists) >= 1:
+                            word_prediction = word_exists[0]
+                        else:
+                            word_prediction = words[0].prediction
+                    else:
+                        closest = []
+                        minDist = min([l[1] for l in lev])
+                        for k, v in lev:
+                            if v == minDist:
+                                closest.append(k)
+                        if len(closest) == 1:
+                            word_prediction = closest[0]
+                        else:
+                            maxConf = 0
+                            final_prediction = ''
+                            for c in closest:
+                                for w in words:
+                                    if w.prediction == c and maxConf < w.get_confidence():
+                                        maxConf = w.get_confidence()
+                                        final_prediction = w.prediction
+
+                            if final_prediction == '':
+                                if len(word_exists) >= 1:
+                                    word_prediction = word_exists[0]
+                                else:
+                                    word_prediction = words[0].prediction
+                            else:
+                                llev = calculateDistance([final_prediction], vocabulary)
+                                llev = sorted(llev.items(), key=operator.itemgetter(1))
+                                # print 'dictieeeee', llev[0][0]
+                                word_prediction = llev[0][0]
+
+            print ', prediction: ', word_prediction
+            matches += 1 if word.text.lower() == word_prediction else 0
+
+    return matches, n_words
+
 if __name__ == "__main__":
     model = 'homemade'
 
@@ -303,209 +500,7 @@ if __name__ == "__main__":
     vocabulary = pickle.load(open('vocabulary.pickle'))
     ngram_voc= extractNGrams(vocabulary)
 
-    def process_file(wordfile, imgfile):
-        n_words = matches = 0
 
-        lines, _ = wordio.read(wordfile)
-        img = Image.open(imgfile)
-
-        for line_idx, line in enumerate(lines):
-            for word_idx, word in enumerate(line):
-                n_words += 1
-
-                cropped = img.crop((word.left, word.top, word.right, word.bottom))
-                color = np.copy(np.asarray(cropped))
-
-                monograms, start, end = get_monograms_otsu(color, cropped)
-
-                if monograms is None:
-                    continue
-
-                for mg in monograms:
-                    if model == 'VGG':
-                        im = 255 - mg.im[:, :, ::-1]
-
-                        im[:, :, 0] -= 103.939
-                        im[:, :, 1] -= 116.779
-                        im[:, :, 2] -= 123.68
-
-                        im = im.transpose((2, 0, 1))
-                        convnet_output = conv_model.predict(im.reshape((1, im.shape[0], im.shape[1], im.shape[2])))
-
-                        features = np.concatenate(
-                            (np.max(convnet_output[:, :, :convnet_output.shape[2] / 2, :], axis=2),
-                             np.max(convnet_output[:, :, convnet_output.shape[2] / 2:, :], axis=2)),
-                            axis=1).transpose((0, 2, 1))
-
-                        feature_seq, _ = pad_sequences([features], maxlen=31, dim=1024)
-
-                        lstm_output = lstm_model.predict_classes([feature_seq, feature_seq], batch_size=1, verbose=0)
-
-                        letter = chr(lstm_output[0] + ord('a'))
-
-                        # print letter
-                        mg.set_prediction(letter)
-                    else:
-                        width, height = 20, 50
-                        im = np.asarray(255 - mg.im, dtype=np.float32)
-                        im /= 255.
-
-                        im = scipy.misc.imresize(im, (height, im.shape[1], im.shape[2]))
-
-                        # if im.shape[1] <= width :
-                        # im = np.pad(im, ((0,0), (0,width-im.shape[1]), (0,0)), mode='constant', constant_values=0)
-                        # else :
-                        im = scipy.misc.imresize(im, (im.shape[0], width, im.shape[2]))
-
-                        # plt.imshow(im)
-                        # plt.show()
-
-                        im = 255 - np.asarray(im, dtype=np.float32)
-                        # im = im[:, :, :] - 126
-                        im /= 255.
-
-                        im = im.transpose((2, 0, 1))
-
-                        conv_output = conv_model.predict_classes(im.reshape((1, im.shape[0], im.shape[1], im.shape[2])),
-                                                                 batch_size=1, verbose=0)
-                        conv_confidences = conv_model.predict(im.reshape((1, im.shape[0], im.shape[1], im.shape[2])),
-                                                              batch_size=1, verbose=0)
-                        letter = chr(conv_output[0] + ord('a'))
-
-                        mg.set_prediction(letter)
-                        mg.set_confidence(conv_confidences[0][conv_output[0]])
-
-
-
-                        if len(monograms) < 50 : #So that it isn't that slow/freezes
-                            threshold = 0.1
-                            
-                            convident_idcs = conv_confidences > threshold
-                            
-                            charlist = (convident_idcs * range(26))[convident_idcs] + ord('a')
-                            chars = [chr(char) for char in charlist]
-
-                            confs = (conv_confidences)[convident_idcs]
-                            options =  zip(chars, confs)
-                            mg.set_options(options)
-                        else :
-                            mg.set_options([(letter, mg.get_confidence())])
-
-                N_grams = monograms
-
-                words = []
-
-                word_prediction = ''
-                print 'Target: ', word.text,
-
-                def build_words2(wrd, N_grams, start, end):
-                    if wrd is None:
-                        for g in N_grams:
-                            if g.start == start:
-                                for char, conf in g.get_options() :
-                                    cpy = N_gram(g.im, g.start, g.end, char, conf)
-                                    build_words2(cpy, N_grams, start, end)
-                        return
-                    if wrd.end == end:
-                        words.append(wrd)
-                        return
-                    for idx, g in enumerate(N_grams):
-                        if wrd.followed_by(g):
-                            for char, conf in g.get_options() :
-                                cpy = N_gram(g.im, g.start, g.end, char, conf)
-                                build_words2(wrd.combine(cpy), N_grams[idx:], start, end)
-
-
-                build_words2(None, N_grams, start, end)
-                
-                words = sorted(words, key=lambda w: w.get_confidence())[::-1]
-
-                # for w in words[:10]:
-                #    print w.prediction, w.get_confidence()
-
-                if len(words) == 0:
-                    print ''
-                    continue
-
-                word_strings = [wrd.prediction for wrd in words]
-
-                for wrd in word_strings:
-                    if wrd in vocabulary:
-                        word_prediction = wrd
-                        break
-
-                if word_prediction == '' :
-                    words = []
-
-                    def build_words(wrd, N_grams, start, end):
-                        if wrd is None:
-                            for g in N_grams:
-                                if g.start == start:
-                                    build_words(g, N_grams, start, end)
-                            return
-                        if wrd.end == end:
-                            words.append(wrd)
-                            return
-                        for idx, g in enumerate(N_grams):
-                            if wrd.followed_by(g):
-                                build_words(wrd.combine(g), N_grams[idx:], start, end)
-
-                    build_words(None, N_grams, start, end)
-                    
-                    words = sorted(words, key=lambda w: w.get_confidence())[::-1]
-
-                    word_strings = [wrd.prediction for wrd in words[:10]]
-
-                    word_exists = checkWordInNgrams2(word_strings, ngram_voc)
-                    
-                    if len(word_exists) == 1:
-                        word_prediction = word_exists[0]
-                    else:
-                        lev = calculateDistance(word_strings, vocabulary)
-                        #print type(lev)
-                        lev = sorted(lev.items(), key=operator.itemgetter(1))
-                        counter = 0
-                        # for k, v in lev[:10]:
-                        #    print "word:" + k + "   with score:" + str(v)
-
-
-                        if lev == {}:
-                            if len(word_exists) >= 1:
-                                word_prediction = word_exists[0]
-                            else:
-                                word_prediction = words[0].prediction
-                        else:
-                            closest = []
-                            minDist = min([l[1] for l in lev])
-                            for k, v in lev:
-                                if v == minDist:
-                                    closest.append(k)
-                            if len(closest) == 1:
-                                word_prediction = closest[0]
-                            else:
-                                maxConf = 0
-                                final_prediction = ''
-                                for c in closest:
-                                    for w in words:
-                                        if w.prediction == c and maxConf < w.get_confidence():
-                                            maxConf = w.get_confidence()
-                                            final_prediction = w.prediction
-
-                                if final_prediction == '':
-                                    if len(word_exists) >= 1:
-                                        word_prediction = word_exists[0]
-                                    else:
-                                        word_prediction = words[0].prediction
-                                else:
-                                    llev = calculateDistance([final_prediction], vocabulary)
-                                    llev = sorted(llev.items(), key=operator.itemgetter(1))
-                                    #print 'dictieeeee', llev[0][0]
-                                    word_prediction = llev[0][0]
-
-                print ', prediction: ', word_prediction
-                matches += 1 if word.text.lower() == word_prediction else 0
-
-        return matches, n_words
 
 
     matches = n_words = 0.

@@ -1,24 +1,13 @@
-import gtk
-import pamImage
-import croplib
-import wordio
-import word as wrd
-import os.path as pth
-import re
-from os import listdir
 import operator
 import pickle
 
 IM_EXT='.ppm'
 
-import re
 import numpy
 
 from skimage.util import img_as_ubyte
 from PIL import Image
 
-import numpy as np
-import nltk
 import distance
 from nltk.util import ngrams
 
