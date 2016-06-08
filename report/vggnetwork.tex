@@ -1,0 +1,26 @@
+\section{Convolutional network for feature extractor}
+One of the architectures for the character recognition consist out of the feature extraction with a pre-trained Convolutional Neural Network (CNN) followed by a classification with the bidirectional Long Short Term Memory. The weights of the pre-trained CNN are from a network that is trained on large scale image dataset \cite{simonyan2014}. This network is called the VGG network by Simonyan \& Zisserman and in table \ref{Tab:convconf} is show the configuration that is used in this paper.    
+\begin{table}
+\begin{tabular}{|c|}\hline
+ConvNet configuration \\\hline
+Conv3-64\\
+Conv3-64\\\hline
+Maxpool\\\hline
+Conv3-128\\
+Conv3-128\\\hline
+Maxpool\\\hline
+Conv3-256\\
+Conv3-256\\
+Conv3-256\\\hline
+Maxpool\\\hline
+Conv3-512\\
+Conv3-512\\
+Conv3-512\\\hline
+Maxpool\\\hline
+Conv3-512\\
+Conv3-512\\
+Conv3-512\\
+\end{tabular}
+\caption{ConvNet configuration for the pretrained feature extraction}
+\label{Tab:convconf}
+\end{table}
