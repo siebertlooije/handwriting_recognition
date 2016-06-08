@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 
 import os
 import os.path
+from keras.preprocessing.image import ImageDataGenerator
 
 import keras_lstm
 
@@ -53,48 +54,23 @@ def init_model(Xshape, Yshape) :
     model = Sequential()
     model.add(ZeroPadding2D((2,2),input_shape=(Xshape)))   #0
     model.add(Convolution2D(64, 5, 5, activation='relu'))       #1
-    model.add(ZeroPadding2D((2,2)))                             #2
     model.add(Convolution2D(64, 5, 5, activation='relu'))       #3
-    model.add(MaxPooling2D((2,2), strides=(1,1)))               #4
+    model.add(MaxPooling2D((2, 2), strides=(2, 2)))               #4
 
-    model.add(ZeroPadding2D((1,1)))                             #5
-    model.add(Convolution2D(64, 3, 3, activation='relu'))      #6
-    model.add(ZeroPadding2D((1,1)))                             #7
+    model.add(Convolution2D(128, 3, 3, activation='relu'))      #6
     model.add(Convolution2D(128, 3, 3, activation='relu'))      #8
-    model.add(MaxPooling2D((2,2), strides=(1,1)))               #9
-
-    # model.add(ZeroPadding2D((1,1)))                             #10
-    # model.add(Convolution2D(256, 3, 3, activation='relu'))      #11
-    # model.add(ZeroPadding2D((1,1)))                             #12
-    # model.add(Convolution2D(256, 3, 3, activation='relu'))      #13
-    # model.add(ZeroPadding2D((1,1)))                             #14
-    # model.add(Convolution2D(256, 3, 3, activation='relu'))      #15
-    # model.add(MaxPooling2D((2,2), strides=(1,1)))               #16
-
-    # model.add(ZeroPadding2D((1,1)))                             #17
-    # model.add(Convolution2D(512, 3, 3, activation='relu'))      #18
-    # model.add(ZeroPadding2D((1,1)))                             #19
-    # model.add(Convolution2D(512, 3, 3, activation='relu'))      #20
-    # model.add(ZeroPadding2D((1,1)))                             #21
-    # model.add(Convolution2D(512, 3, 3, activation='relu'))      #22
-    # model.add(MaxPooling2D((1,1), strides=(1,1)))               #23
-
-    # model.add(ZeroPadding2D((1,1)))                             #24
-    # model.add(Convolution2D(512, 3, 3, activation='relu'))      #25
-    # model.add(ZeroPadding2D((1,1)))                             #26
-    # model.add(Convolution2D(512, 3, 3, activation='relu'))      #27
-    # model.add(ZeroPadding2D((1,1)))                             #28
-    # model.add(Convolution2D(512, 3, 3, activation='relu'))      #29
-    # model.add(MaxPooling2D((2,2), strides=(2,2)))               #30
+    model.add(MaxPooling2D((2, 2), strides=(2, 2)))               #9
 
     model.add(Flatten())                                        #31
-    model.add(Dense(128, activation='relu'))                    #32
+    model.add(Dense(256, activation='relu'))                    #32
     model.add(Dropout(0.5))                                     #33
+    model.add(Dense(256, activation='relu'))
+    model.add(Dropout(0.5))
 
     model.add(Dense(Yshape, activation='softmax'))
 
-    sgd = SGD(lr=0.001, decay=1e-6, momentum=0.9, nesterov=True)
-    model.compile(optimizer=sgd, 
+    sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+    model.compile(optimizer=sgd,
         loss='categorical_crossentropy',
         metrics=['accuracy'])
 
@@ -105,7 +81,7 @@ def resize_dataset(width, height) :
     counter = 0
 
     print 'counting images...'
-    for i, line in enumerate(open('../toolbox/labels.txt')):
+    for i, line in enumerate(open('../toolbox/labels_shuf.txt')):
         path, label = line.split()
         try:
             im = np.asarray(Image.open(path.replace('/crops', '/crops/letters'))) # , dtype=np.float32
@@ -121,29 +97,24 @@ def resize_dataset(width, height) :
     print str(total) + ' images found'
 
     counter = 0
-    for i, line in enumerate(open('../toolbox/labels.txt')):
+    for i, line in enumerate(open('../toolbox/labels_shuf.txt')):
         path, label = line.split()
         try:
 
-            im = np.asarray(Image.open(path.replace('/crops', '/crops/letters'))) # , dtype=np.float32
+            im = np.asarray(Image.open(path.replace('/crops', '/crops/letters')), dtype=np.float32) # , dtype=np.float32
 
-            # im = 255 - im[:, :, :]
-            im = im[:, :, :] - 126
-            im = im[:, :, :] / 126
+            #print np.max(im), np.min(im),
+            im = 255 - im
+            #im = im[:, :, :] - 126
+            im /= 255.
 
-            # if im.shape[0] <= height :
-            #     im = np.pad(im, ((0,height-im.shape[0]), (0,0), (0,0)), mode='constant', constant_values=0)
-            # else :
             im = scipy.misc.imresize(im, (height, im.shape[1], im.shape[2]))
 
-            # if im.shape[1] <= width :
-            # im = np.pad(im, ((0,0), (0,width-im.shape[1]), (0,0)), mode='constant', constant_values=0)
-            # else :
             im = scipy.misc.imresize(im, (im.shape[0], width, im.shape[2]))
 
-            #plt.imshow(im)
-            #plt.show()
-
+            im = np.asarray(im, dtype=np.float32)
+            # im = im[:, :, :] - 126
+            im /= 255.
 
             im = im.transpose((2, 0, 1))
             
@@ -156,7 +127,7 @@ def resize_dataset(width, height) :
 
             progress = counter/float(total)
             loadbar = '#' * int(round(20*progress)) +  ' ' * int(round(20*(1-progress)))
-            print '\r[{0}] {1} of {2} images resized'.format(loadbar, 
+            print '\r[{0}] {1} of {2} images resized'.format(loadbar,
                 counter,
                 total),
         except IOError:
@@ -169,14 +140,33 @@ if __name__ == "__main__":
 
     X,Y = resize_dataset(width, height)
     Y = to_categorical(np.asarray(Y))
-    
+
+    trainX = X[:14000]
+    trainY = Y[:14000]
+
+    testX = X[14000:]
+    testY = Y[14000:]
+
     model = init_model(X.shape[1:], Y.shape[1])
 
+    datagen = ImageDataGenerator(
+        featurewise_center=False,
+        featurewise_std_normalization=False,
+        rotation_range=2,
+        shear_range=.05,
+        width_shift_range=0.1,
+        height_shift_range=0.1,
+        ink_intensity=True,
+        fill_mode='constant'
+    )
 
-    model.fit(X, Y, batch_size = 16, nb_epoch = 10, validation_split= .1)
+    datagen.fit(trainX)
+
+    model.fit_generator(datagen.flow(trainX, trainY, batch_size=32), samples_per_epoch=len(trainX), nb_epoch=100,
+                        validation_data=(testX, testY))
+
+    #model.fit(X, Y, batch_size = 16, nb_epoch = 100, validation_split= .1)
 
     filedir = os.path.join(os.getcwd())
-    filename = os.path.join(filedir, 'weights')
+    filename = os.path.join(filedir, 'weights.h5')
     model.save_weights(filename)
-    
-    
