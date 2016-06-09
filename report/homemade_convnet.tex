@@ -1,7 +1,7 @@
 \subsection{CNN with MLP trained end-to-end}
 \label{sec:hmdcnn}
 
-The other architecture used for character recognition consists of a CNN followed by a multilayer perceptron (MLP). Table \ref{tab:hmdcnnconf} shows the configuration of the CNN. After each convolution layer, the rectified linear unit (ReLU) activation function is applied to the neurons. The input character images are scaled to $50 \times 50$ pixels so that the output volume of the CNN has a consistent size. The flattened output volume of the CNN is used as input for the MLP. 
+The other architecture used for character recognition consists of a CNN followed by a multilayer perceptron (MLP). Table \ref{tab:hmdcnnconf} shows the configuration of the CNN. After each convolution layer, the rectified linear unit (ReLU) activation function is applied to the neurons. The input character images are scaled to $20 \times 50$ pixels so that the output volume of the CNN has a consistent size. The flattened output volume of the CNN is used as input for the MLP. 
 
 The MLP consists of two hidden layers with 256 neurons each. The activation function used to calculate the activation of the hidden neurons is the ReLU. Dropout is applied to the hidden layers so that only 50\% of the neurons in the preceding layer are retained. After the MLP, a softmax output layer is used for classification. The entire architecture is trained end-to-end. 
 
