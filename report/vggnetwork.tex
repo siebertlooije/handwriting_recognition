@@ -1,26 +1,32 @@
-\section{Convolutional network for feature extractor}
-One of the architectures for the character recognition consist out of the feature extraction with a pre-trained Convolutional Neural Network (CNN) followed by a classification with the bidirectional Long Short Term Memory. The weights of the pre-trained CNN are from a network that is trained on large scale image dataset \cite{simonyan2014}. This network is called the VGG network by Simonyan \& Zisserman and in table \ref{Tab:convconf} is show the configuration that is used in this paper.    
+\subsection{Pretrained VGG net with LSTM}
+\label{sec:vgg}
+One of the architectures for the character recognition consists of a pre-trained convolutional neural network (CNN) followed by a classification with the bidirectional long short-term memory. The weights of the pre-trained CNN are from a network that is trained on the ImageNet dataset \cite{simonyan2014very}. This network is called the VGG network by Simonyan et al. Table \ref{tab:convconf} provides a detailed overview of the pretrained architecture, which we slightly adapated. that we have u and in table  is show the configuration that is used in this paper.
+
+Initially we wanted to view the output of the architecture as given in Table \ref{tab:convconf} as a time-series where time is directed along horizontal axis of the image. We perform column-wise max pooling in which we split the top-half and bottom-half of the convolved features. Given that the final convolutional layer consists of 512 feature slices, this yields 1024 features per time step. Note that in this way, we can feed the network with images of arbitrary size. The time series are then passed on to an LSTM that is currently only used for character recognition. Hence, the LSTM performs only a single classification per input image.
+
+The LSTM consists of a biderectional layer in which both directions contain 512 hidden neurons. These are the concatenated to form the input to the next layer. On top of the bidrectional layer we have added another LSTM layer that contains 512 hidden neurons. Classification is performed by using a softmax output layer.
 \begin{table}
-\begin{tabular}{|c|}\hline
-ConvNet configuration \\\hline
-Conv3-64\\
-Conv3-64\\\hline
-Maxpool\\\hline
-Conv3-128\\
-Conv3-128\\\hline
-Maxpool\\\hline
-Conv3-256\\
-Conv3-256\\
-Conv3-256\\\hline
-Maxpool\\\hline
-Conv3-512\\
-Conv3-512\\
-Conv3-512\\\hline
-Maxpool\\\hline
-Conv3-512\\
-Conv3-512\\
-Conv3-512\\
-\end{tabular}
+\renewcommand{\arraystretch}{1.3}
+\centering
 \caption{ConvNet configuration for the pretrained feature extraction}
-\label{Tab:convconf}
+\begin{tabular}{r|cl}\hline
+Layer name & $N$ kernels & Kernel/pool dimensions \\ \hline \hline
+Conv. 1 & 64 & $3 \times 3 \times 3$  \\
+Conv. 2 & 64 & $3 \times 3 \times 64$ \\
+Max pooling 3 & NA & $2\times 2$ \\
+Conv. 3 & 128 & $3 \times 3 \times 64$ \\
+Conv. 4 & 128 & $3 \times 3 \times 128$ \\
+Max pooling 5 & NA & $2\times 2$ \\
+Conv. 6 & 256 & $3 \times 3 \times 128$ \\
+Conv. 7 & 256 & $3 \times 3 \times 256$ \\
+Conv. 8 & 256 & $3 \times 3 \times 256$ \\
+Max pooling 9 & NA & $2\times 2$ \\
+Conv. 10 & 256 & $3 \times 3 \times 128$ \\
+Conv. 11 & 256 & $3 \times 3 \times 256$ \\
+Conv. 12 & 256 & $3 \times 3 \times 256$ \\
+Conv. 13 & 512 & $3 \times 3 \times 256$ \\
+Conv. 14 & 512 & $3 \times 3 \times 512$ \\
+Conv. 15 & 512 & $3 \times 3 \times 512$ \\ \hline
+\end{tabular}
+\label{tab:convconf}
 \end{table}

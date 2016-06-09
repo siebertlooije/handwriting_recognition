@@ -1,0 +1,5 @@
+\subsection{Data augmentation}
+\label{sec:data}
+In order to boost the generalization abilities of our classifiers, we augment the data in a variety of ways. We rotate the images randomly with an angle of $\theta$ degrees where $\theta \in [-2, 2]$. We also applied a shearing transformation with a shearing factor $s$ where $s \in [-0.05,0.05]$. The characters were also randomly translated with $\pm 5$ pixels in the both directions to make the network less sensitive to translation differences. Finally, we applied an ink intensity augmentation. 
+
+The ink intensity augmentation works by first categorizing the pixels in two groups. The first group of pixels corresponds to the paper background, whose RGB values are closest to (255,255,255). The second group of pixels corresponds to the ink whose RGB values are closest to (0,0,0), respectively. We then shift the mean and standard deviations of both groups of pixels separately by adding a random integer $a$ where $a\in [-10,10]$ after which we multiply the result with a scalar $\alpha$ where $\alpha \in [0.8,1.2]$.
