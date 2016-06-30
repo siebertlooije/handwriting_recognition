@@ -309,7 +309,8 @@ def recognize_word_file(wordfile, imgfile):
                     convident_idcs = conv_confidences > threshold
 
                     #charlist = (convident_idcs * range(len(label_mapping)))[convident_idcs] + ord('a')
-                    chars = label_mapping #[convident_idcs] #label_mapping #[chr(char) for char in charlist]
+                    char_idxs = (convident_idcs * range(len(label_mapping)))[convident_idcs]
+                    chars = np.asarray(label_mapping)[char_idxs] #[convident_idcs] #label_mapping #[chr(char) for char in charlist]
 
                     confs = (conv_confidences)[convident_idcs]
                     options = zip(chars, confs)
@@ -356,7 +357,7 @@ def recognize_word_file(wordfile, imgfile):
                             cpy = N_gram(g.im, g.start, g.end, char, conf)
                             build_words2(wrd.combine(cpy), N_grams[idx:], start, end)
 
-            build_words(None, N_grams, start, end)
+            build_words2(None, N_grams, start, end)
 
             words = sorted(words, key=lambda w: w.get_confidence())[::-1]
 
