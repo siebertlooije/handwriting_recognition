@@ -19,6 +19,9 @@ from ngram_checker import *
 
 from os import listdir
 import copy
+import pickle as pkl
+
+label_mapping = pkl.load(open('char_mappings.pkl', 'rb'))
 
 class N_gram(object):
 
@@ -197,7 +200,7 @@ def home_made_convnet(Xshape, Yshape):
 
     model.add(Dense(Yshape, activation='softmax'))
 
-    model.load_weights('weights.h5')
+    model.load_weights('weights_f.h5')
 
     sgd = SGD(lr=0.001, decay=1e-6, momentum=0.9, nesterov=True)
     model.compile(optimizer=sgd,
@@ -248,7 +251,7 @@ def pad_sequences(sequences, maxlen=None, dim=1, dtype='int32',
     return x,maxlen
 
 
-def process_file(wordfile, imgfile):
+def recognize_word_file(wordfile, imgfile):
     n_words = matches = 0
 
     lines, _ = wordio.read(wordfile)
@@ -271,7 +274,7 @@ def process_file(wordfile, imgfile):
                 continue
 
             for mg in monograms:
-                width, height = 20, 50
+                width, height = 30, 55
                 im = np.asarray(255 - mg.im, dtype=np.float32)
                 im /= 255.
 
@@ -285,7 +288,7 @@ def process_file(wordfile, imgfile):
                 # plt.imshow(im)
                 # plt.show()
 
-                im = 255 - np.asarray(im, dtype=np.float32)
+                im = np.asarray(im, dtype=np.float32)
                 # im = im[:, :, :] - 126
                 im /= 255.
 
@@ -295,7 +298,7 @@ def process_file(wordfile, imgfile):
                                                          batch_size=1, verbose=0)
                 conv_confidences = conv_model.predict(im.reshape((1, im.shape[0], im.shape[1], im.shape[2])),
                                                       batch_size=1, verbose=0)
-                letter = chr(conv_output[0] + ord('a'))
+                letter = label_mapping[conv_output[0]]#chr(conv_output[0] + ord('a'))
 
                 mg.set_prediction(letter)
                 mg.set_confidence(conv_confidences[0][conv_output[0]])
@@ -305,8 +308,8 @@ def process_file(wordfile, imgfile):
 
                     convident_idcs = conv_confidences > threshold
 
-                    charlist = (convident_idcs * range(26))[convident_idcs] + ord('a')
-                    chars = [chr(char) for char in charlist]
+                    #charlist = (convident_idcs * range(len(label_mapping)))[convident_idcs] + ord('a')
+                    chars = label_mapping #[convident_idcs] #label_mapping #[chr(char) for char in charlist]
 
                     confs = (conv_confidences)[convident_idcs]
                     options = zip(chars, confs)
@@ -320,6 +323,21 @@ def process_file(wordfile, imgfile):
 
             word_prediction = ''
             #print 'Target: ', word.text,
+
+
+
+            def build_words(wrd, N_grams, start, end):
+                if wrd is None:
+                    for g in N_grams:
+                        if g.start == start:
+                            build_words(g, N_grams, start, end)
+                    return
+                if wrd.end == end:
+                    words.append(wrd)
+                    return
+                for idx, g in enumerate(N_grams):
+                    if wrd.followed_by(g):
+                        build_words(wrd.combine(g), N_grams[idx:], start, end)
 
             def build_words2(wrd, N_grams, start, end):
                 if wrd is None:
@@ -338,7 +356,7 @@ def process_file(wordfile, imgfile):
                             cpy = N_gram(g.im, g.start, g.end, char, conf)
                             build_words2(wrd.combine(cpy), N_grams[idx:], start, end)
 
-            build_words2(None, N_grams, start, end)
+            build_words(None, N_grams, start, end)
 
             words = sorted(words, key=lambda w: w.get_confidence())[::-1]
 
@@ -424,6 +442,7 @@ def process_file(wordfile, imgfile):
                                 # print 'dictieeeee', llev[0][0]
                                 word_prediction = llev[0][0]
 
+            print 'Prediction: ', word_prediction
             output_word.text = word_prediction
             output_line.append(output_word)
         output_lines.append(output_line)
@@ -437,9 +456,12 @@ if __name__ == "__main__":
     vocabulary = pickle.load(open('shen_vocabulary.pickle'))
     ngram_voc = extractNGrams(vocabulary)
 
-    output_lines = process_file(sys.argv[2], sys.argv[1])
+    for f in listdir('subsettest/words'):
+        wordfile = 'subsettest/words/' + f
+        imgfile = wordfile.replace('.words', IM_EXT).replace('/words','/pages')
 
-    wordio.save(output_lines, sys.argv[3])
+        output_lines = recognize_word_file(wordfile, imgfile)
+        wordio.save(output_lines, 'outdir/' + f)
 
 
 

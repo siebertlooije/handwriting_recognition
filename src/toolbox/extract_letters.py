@@ -4,8 +4,11 @@ import croplib
 import wordio
 import word as wrd
 import os.path as pth
+import matplotlib.pyplot as plt
+import pickle as pkl
 
 from os import listdir
+
 
 IM_EXT='.ppm'
 
@@ -25,6 +28,9 @@ label_dict = {'!': 1, '#' : 2, '$' : 3, '&': 4, '*': 5, ',': 6, '-' : 7, '.': 8,
               'u' : 34, 'v' : 35, 'w' : 36, 'x' : 37, 'y' : 38, 'z' : 39}
 
 word_log = {}
+
+
+label_mapping = pkl.load(open('char_mappings.pkl', 'rb'))
 
 def extractImages(wordfile, imgfile, l_file):
     print wordfile
@@ -85,19 +91,11 @@ def extractImages(wordfile, imgfile, l_file):
 
                 sub_cropped = cropped.crop((left, top, right, bottom))
 
-                char_string = char.text.lower() #.lower() #if char.text is not '\\' else 'bb'
-                if char_string == '\\':
-                    char_string = 'bb'
-                if char.text == ';':
-                    char_string = 'pk'
-                if char.text == "":
-                    print 'It\'s empty!'
-                    continue
-                if char.text in ['-', ',', '4', '?', '!', ':', ';', '^', '\\']:
-                    print 'ignoring ' + char.text
-                    continue
+                char_string = char.text #.lower() #.lower() #if char.text is not '\\' else 'bb'
 
-                if char_string not in 'abcdefghijklmnopqrstuvwxyz':
+
+
+                if char_string not in 'abcdefghijklmnopqrstuvwxyz&#*\\ABCDEFGHJIKLMNOPQRSTUVWXYZ' or char_string == '':
                     continue
 
                 out_path = out_str + '_l' + str(line_idx) + '_w' + str(word_idx) + '_c' + str(idx) + '_t_' + char_string + IM_EXT
@@ -111,12 +109,19 @@ def extractImages(wordfile, imgfile, l_file):
                 else:
                     word_log[char_string] = 1
 
-                if char_string in label_dict:
-                    l_file.write(out_path + ' ' + str(ord(char_string) - ord('a')) + '\n')
+                #if char_string in label_dict:
+
+                    #l_file.write(out_path + ' ' + str(ord(char_string) - ord('a')) + '\n')
+                l_file.write(out_path + ' ' + str(label_mapping.index(char_string)) + ' \n')
+
 
 if __name__ == "__main__":
 
-    label_file = open('labels.txt', 'w')
+
+
+    label_file = open('labels_new.txt', 'w')
+    print label_mapping
+    print len(label_mapping)
 
 
     print 'Cropping...'
@@ -138,6 +143,10 @@ if __name__ == "__main__":
 
     for key in word_log:
         print key, ':', word_log[key]
+
+    print [str(a) for a in list(word_log.keys())]
+
+    pkl.dump([str(a) for a in list(word_log.keys())], open('char_mappings.pkl', 'wb'))
 
     #print len(word_log)
     label_file.close()

@@ -13,9 +13,10 @@ import matplotlib.pyplot as plt
 import scipy
 
 from ngram_checker import *
-
+import pickle as pkl
 from os import listdir
 
+label_mapping = pkl.load(open('char_mappings.pkl', 'rb'))
 class N_gram(object):
 
     def __init__(self, im, start, end, prediction=None, confidence=None, options = None):
@@ -193,7 +194,7 @@ def home_made_convnet(Xshape, Yshape):
 
     model.add(Dense(Yshape, activation='softmax'))
 
-    model.load_weights('weights.h5')
+    model.load_weights('weights_f.h5')
 
     sgd = SGD(lr=0.001, decay=1e-6, momentum=0.9, nesterov=True)
     model.compile(optimizer=sgd,
@@ -296,7 +297,7 @@ def process_file(wordfile, imgfile):
                     # print letter
                     mg.set_prediction(letter)
                 else:
-                    width, height = 20, 50
+                    width, height = 30, 55
                     im = np.asarray(255 - mg.im, dtype=np.float32)
                     im /= 255.
 
@@ -310,7 +311,7 @@ def process_file(wordfile, imgfile):
                     # plt.imshow(im)
                     # plt.show()
 
-                    im = 255 - np.asarray(im, dtype=np.float32)
+                    im = np.asarray(im, dtype=np.float32)
                     # im = im[:, :, :] - 126
                     im /= 255.
 
@@ -320,7 +321,7 @@ def process_file(wordfile, imgfile):
                                                              batch_size=1, verbose=0)
                     conv_confidences = conv_model.predict(im.reshape((1, im.shape[0], im.shape[1], im.shape[2])),
                                                           batch_size=1, verbose=0)
-                    letter = chr(conv_output[0] + ord('a'))
+                    letter = label_mapping[conv_output[0]] #chr(conv_output[0] + ord('a'))
 
                     mg.set_prediction(letter)
                     mg.set_confidence(conv_confidences[0][conv_output[0]])
@@ -330,8 +331,10 @@ def process_file(wordfile, imgfile):
 
                         convident_idcs = conv_confidences > threshold
 
-                        charlist = (convident_idcs * range(26))[convident_idcs] + ord('a')
-                        chars = [chr(char) for char in charlist]
+                        #charlist = label_mapping #(convident_idcs * range(26))[convident_idcs] + ord('a')
+                        char_idxs = (convident_idcs * range(len(label_mapping)))[convident_idcs]
+                        print char_idxs
+                        chars = np.asarray(label_mapping)[char_idxs] #np.asarray(label_mapping)[convident_idcs]#[chr(char) for char in charlist]
 
                         confs = (conv_confidences)[convident_idcs]
                         options = zip(chars, confs)
@@ -345,6 +348,19 @@ def process_file(wordfile, imgfile):
 
             word_prediction = ''
             print 'Target: ', word.text,
+
+            def build_words(wrd, N_grams, start, end):
+                if wrd is None:
+                    for g in N_grams:
+                        if g.start == start:
+                            build_words(g, N_grams, start, end)
+                    return
+                if wrd.end == end:
+                    words.append(wrd)
+                    return
+                for idx, g in enumerate(N_grams):
+                    if wrd.followed_by(g):
+                        build_words(wrd.combine(g), N_grams[idx:], start, end)
 
             def build_words2(wrd, N_grams, start, end):
                 if wrd is None:
@@ -403,7 +419,7 @@ def process_file(wordfile, imgfile):
 
                 word_strings = [wrd.prediction for wrd in words[:10]]
 
-                word_exists = checkWordInNgrams2(word_strings, ngram_voc)
+                word_exists = checkWordInNgrams(word_strings, ngram_voc)
 
                 if len(word_exists) == 1:
                     word_prediction = word_exists[0]
@@ -450,7 +466,7 @@ def process_file(wordfile, imgfile):
                                 word_prediction = llev[0][0]
 
             print ', prediction: ', word_prediction
-            matches += 1 if word.text.lower() == word_prediction else 0
+            matches += 1 if word.text.replace(';',"").replace('~','').replace('valde_','').replace('Ottonenem', '').replace('ducem', '').replace('@','').replace('^o', '').replace('@ampersand', '&').replace(']', '') == word_prediction else 0
 
     return matches, n_words
 
@@ -497,8 +513,8 @@ if __name__ == "__main__":
                            optimizer='rmsprop',
                            metrics=['accuracy'])
 
-    vocabulary = pickle.load(open('shen_vocabulary.pickle'))
-    ngram_voc= extractNGrams(vocabulary)
+    vocabulary = pickle.load(open('vocabulary.pickle'))
+    ngram_voc = extractNGrams(vocabulary)
 
 
 
@@ -519,6 +535,7 @@ if __name__ == "__main__":
         m, nw = process_file(wordfile, imgfile)
         matches += m
         n_words += nw
+
 
     print 'Final rate: ', matches / n_words
 
