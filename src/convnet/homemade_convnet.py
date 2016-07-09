@@ -1,7 +1,7 @@
 from keras.models import Sequential
 from keras.layers.core import Flatten, Dense, Dropout
 from keras.layers.convolutional import Convolution2D, MaxPooling2D, ZeroPadding2D
-from keras.optimizers import SGD
+from keras.optimizers import SGD, Adadelta
 import cv2, numpy as np, scipy
 from PIL import Image
 
@@ -70,9 +70,10 @@ def init_model(Xshape, Yshape) :
     model.add(Dense(Yshape, activation='softmax'))
 
     sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+    #adadelta = Adadelta()
     model.compile(optimizer=sgd,
-        loss='categorical_crossentropy',
-        metrics=['accuracy'])
+                  loss='categorical_crossentropy',
+                  metrics=['accuracy'])
 
     return model
 
@@ -81,14 +82,24 @@ def resize_dataset(width, height) :
     counter = 0
 
     print 'counting images...'
-    for i, line in enumerate(open('../toolbox/labels_shuf.txt')):
+    heights = []
+    width = []
+    for i, line in enumerate(open('../toolbox/labels_shuf_new.txt')):
         path, label = line.split()
         try:
             im = np.asarray(Image.open(path.replace('/crops', '/crops/letters'))) # , dtype=np.float32
+            heights.append(im.shape[0])
+            width.append(im.shape[1])
+            #print im.shape
             counter += 1
         except IOError:
             print(path + ' gives trouble...')
             continue
+
+    height = int(np.median(heights))
+    width = int(np.median(width))
+    print 'w x h == {0} x {1}'.format(width, height)
+
 
     X = np.zeros((counter, 3, height, width))
     Y = np.zeros((counter, 3, height, width), dtype = int)
@@ -97,7 +108,7 @@ def resize_dataset(width, height) :
     print str(total) + ' images found'
 
     counter = 0
-    for i, line in enumerate(open('../toolbox/labels_shuf.txt')):
+    for i, line in enumerate(open('../toolbox/labels_shuf_new.txt')):
         path, label = line.split()
         try:
 
@@ -141,11 +152,11 @@ if __name__ == "__main__":
     X,Y = resize_dataset(width, height)
     Y = to_categorical(np.asarray(Y))
 
-    trainX = X[:14000]
-    trainY = Y[:14000]
+    trainX = X#[:14000]
+    trainY = Y#[:14000]
 
-    testX = X[14000:]
-    testY = Y[14000:]
+    #testX = X[14000:]
+    #testY = Y[14000:]
 
     model = init_model(X.shape[1:], Y.shape[1])
 
@@ -162,11 +173,10 @@ if __name__ == "__main__":
 
     datagen.fit(trainX)
 
-    model.fit_generator(datagen.flow(trainX, trainY, batch_size=32), samples_per_epoch=len(trainX), nb_epoch=100,
-                        validation_data=(testX, testY))
+    model.fit_generator(datagen.flow(trainX, trainY, batch_size=32), samples_per_epoch=len(trainX), nb_epoch=300)
 
     #model.fit(X, Y, batch_size = 16, nb_epoch = 100, validation_split= .1)
 
     filedir = os.path.join(os.getcwd())
-    filename = os.path.join(filedir, 'weights.h5')
+    filename = os.path.join(filedir, 'weights_f.h5')
     model.save_weights(filename)
