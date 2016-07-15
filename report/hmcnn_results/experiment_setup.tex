@@ -1,0 +1,11 @@
+
+\subsection{Data}
+The dataset that was used for the experiments consists of historical documents that are images of either Old English or Latin texts. The Latin text data is referred to as the KNMP data and the Old English text data is referred to as the Stanford data. We are provided with a labeled and segmented subset of this data on which we train our character classifiers. The characters that we have trained our models to recognize are all letters from the alphabet in lower and upper case excluding the F, J, Y, Z, w and j. Other than that we train our models to predict the ampersand, the Old English thorn and the Tironian et.
+
+\subsection{Train and test configurations}
+In each iteration of the cross-validation for the CNN we train the network for 100 epochs. The parameters are optimized by using Nesterov accelerated stochastic gradient descent (NASGD) with minibatches of 32 images \cite{nesterov1983method}. The learning rate is set to $\eta=0.01$, the learning rate decay factor $\gamma=1\cdot10^{-6}$. Additionally, we use a momentum of $\mu=0.9$. Dropout was only applied to the fully connected layers at the end with $p_{drop}=0.5$.
+
+The LSTM network is trained using the RMSprop optimizer algorithm \cite{tieleman2012lecture}. The dropout rate was set to $p_{drop}=0.2$. 
+
+The character data consists of 16k labeled character images and were cropped from historical documents of old-English and Roman texts. For determining the word classification rate we used 4k word crops. It is important to note that the data were not labeled consistently as some f-characters were confused with s-characters. Moreover, some special characters such as the Old English thorn were poorly labeled.
+

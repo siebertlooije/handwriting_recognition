@@ -1,0 +1,18 @@
+
+\begin{table}
+\renewcommand{\arraystretch}{1.3}
+ \centering
+ \caption{Classification rates on word data}
+ \label{tab:words}
+\begin{tabular}{r|cc}\hline
+Data & Without language model & With language model \\ \hline \hline
+Pre-supplied KNMP & $62.41\%$ & $72.11\%$ \\
+Pre-supplied Stanford & $62.72\%$  & $68.41\%$ \\
+Total pre-supplied & $62.48$ & $71.26\%$\\ \hline
+Test KNMP & NA & $85.32\%$\\
+Test Stanford & NA & $66.32\%$ \\
+Total test & NA & $82.03\%$ \\ \hline
+\end{tabular}
+
+ 
+\end{table}

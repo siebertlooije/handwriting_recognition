@@ -1,10 +1,10 @@
 6 nets met andere 90% train 10% test splits:
 augmentation	no augmentation
 train	test	train	test
-98.63 	[96.24] 99.88 	95.14 	
+98.63 	96.24 	99.88 	95.14 	
 98.6 	95.44 	99.89 	94.33 	
 98.97 	94.83 	99.9 	94.58
-	96.64		94.82
+	[96.64]		94.82
 	95.02 		95.23
 
 
