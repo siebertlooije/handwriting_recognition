@@ -1,0 +1,14 @@
+6 nets met andere 90% train 10% test splits:
+augmentation	no augmentation
+train	test	train	test
+98.63 	[96.24] 99.88 	95.14 	
+98.6 	95.44 	99.89 	94.33 	
+98.97 	94.83 	99.9 	94.58 	
+
+misclassifications van best performing net (die met []):
+s: f:23  e:1   z:1   , dus 23 's'en werd als 'f' geclassificeerd
+l: i:5   f:1   t:1
+h: t:3   \:1   p:1
+d: \:2   A:2   S:1
+f: s:3   t:1
+i: t:3
