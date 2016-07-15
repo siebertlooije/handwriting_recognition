@@ -3,7 +3,17 @@ augmentation	no augmentation
 train	test	train	test
 98.63 	[96.24] 99.88 	95.14 	
 98.6 	95.44 	99.89 	94.33 	
-98.97 	94.83 	99.9 	94.58 	
+98.97 	94.83 	99.9 	94.58
+	96.64		94.82
+	95.02 		95.23
+
+
+LSTM
+augmnetation	no augmentation
+	test		test
+	76.23		75.11
+	75.85		74.89
+	75.54		75.26
 
 misclassifications van best performing net (die met []):
 s: f:23  e:1   z:1   , dus 23 's'en werden als 'f' geclassificeerd
